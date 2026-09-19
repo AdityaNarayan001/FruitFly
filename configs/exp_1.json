@@ -1,0 +1,11 @@
+{
+  "protocol": "EXP-001 v0.1",
+  "mode": "development",
+  "evaluation_enabled": false,
+  "blocking_requirements": ["Audited retinal mapping", "Independently assigned readout directions", "Frozen dynamics and decoder", "Verified null graph generator", "Dated protocol amendment"],
+  "development_seeds": [0,1,2,3,4],
+  "reserved_evaluation_seeds": [100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119],
+  "baseline_ms":500,"stimulus_ms":1000,"recovery_ms":500,
+  "contrast":0.8,"cycles_per_field":4,"temporal_hz":2,
+  "learning":false
+}

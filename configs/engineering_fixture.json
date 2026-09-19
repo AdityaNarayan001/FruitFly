@@ -1,0 +1,9 @@
+{
+  "mode": "engineering",
+  "graph": "fixture",
+  "seed": 9000,
+  "duration_ms": 1000,
+  "chunk_ticks": 20,
+  "drive_mv_per_tick": 0.9,
+  "parameters": {"dt_ms":1.0,"tau_m_ms":20.0,"tau_s_ms":5.0,"rest_mv":-52.0,"threshold_mv":-45.0,"refractory_ms":2.0,"delay_ms":2.0}
+}

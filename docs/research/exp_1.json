@@ -1,0 +1,248 @@
+{
+  "filename": "exp_1.pdf",
+  "title": "Experiment 1: fixed-connectome visual motion responses",
+  "subtitle": "Prospective protocol, modeling assumptions, controls and reproducibility criteria",
+  "code": "EXP-001",
+  "pages": [
+    {
+      "title": "Experiment 1: visual motion without learning",
+      "content": [
+        {
+          "h": "Question and scope"
+        },
+        "Can a MaleCNS-constrained model, with fixed parameters and an independently specified visual mapping, produce reproducible direction-dependent neural responses to moving patterns? Can a fixed, disclosed decoder express those responses as virtual steering? The neural response is the scientific endpoint; the avatar is a secondary visualization.",
+        {
+          "note": "Version 0.2, 19 September 2026. The original prospective protocol is retained on pages 1-8; page 9 records an engineering amendment after exploratory development runs. No external registration or biological validation is claimed. Confirmatory execution remains gated on a mapping/model freeze amendment."
+        },
+        {
+          "h": "Motivation"
+        },
+        "In real flies, T4/T5 neurons participate in visual motion processing; experimental blockade disrupts optomotor responses. This motivates a falsifiable perturbation arm. It does not guarantee that a uniform point-neuron approximation recreates the required computation. [01,02]",
+        {
+          "h": "Hypotheses"
+        },
+        "<b>H1:</b> predefined motion-sensitive populations show responses favoring their independently assigned preferred direction. <b>H2:</b> this direction-dependent response exceeds the selected connectivity null under matched inputs. <b>H3, secondary:</b> silencing T4/T5 reduces downstream directional responses. A negative result constrains this implementation and parameterization; it does not disprove motion processing in real flies.",
+        "No weights, encoder parameters, decoder parameters or reward signals are trained during evaluation. Development tuning is allowed only on designated development runs and must be logged. Evaluation is unavailable until the selected configuration and mappings have been frozen.",
+        "Owner: FruitFlyBrain project. Execution: gx10-a and gx10-b. Interface and authoritative source: Mac, Desktop/FruitFlyBrain."
+      ]
+    },
+    {
+      "title": "Data and mapping release gates",
+      "content": [
+        {
+          "h": "Dataset audit"
+        },
+        "Use MaleCNS v1.0 annotation, neurotransmitter and aggregate connection tables. Keep integer body identifiers exact; never cast them through floating-point representations. Retain declared neuron populations including isolated retained nodes. Report excluded segments, duplicates, contact totals and directed edges. Preserve original inputs and SHA-256 values. [03]",
+        {
+          "h": "Retinotopic input mapping"
+        },
+        "Use published visual-column assignments and validated spatial information to associate visual coordinates with input neurons. Record the source and transformation for every mapped ID. Left and right eye coordinate conventions must be explicit and tested with synthetic spatial patterns. Arbitrary ordering of IDs is not a retinal map. [04]",
+        "A mapping release includes body_id, eye, visual_x, visual_y, source and confidence. Missing, duplicated or unaccounted inputs are audited. The protocol must record coverage and any interpolation. If published information cannot support a defensible mapping, visual-motion evaluation remains blocked while direct-stimulation engineering tests can continue.",
+        {
+          "h": "Readout population mapping"
+        },
+        "Select T4/T5 subtypes and downstream populations from annotations and biological evidence before viewing evaluation traces. Assign preferred directions independently of the responses. Record both the biological evidence and any ambiguity. A fixed left-minus-right activity decoder is an engineering choice, not proof of natural motor function.",
+        {
+          "note": "Freeze gate: publish mapping tables, their digests, neuron lists, sign policy, final configuration and analysis script in a dated EXP-001 amendment. A synthetic fixture or provisional coordinate mapping can never satisfy this gate."
+        },
+        "All preliminary runs carry an engineering or development label. They are excluded from confirmatory summaries even if an attractive directional trace appears."
+      ]
+    },
+    {
+      "title": "Numerical model and assumptions",
+      "content": [
+        {
+          "h": "Initial engineering model"
+        },
+        "Use sparse incoming adjacency and one leaky integrate-and-fire state per retained neuron. The first solver uses float32 on CUDA with a NumPy CPU reference on small networks. Evaluate a fixed-step discrete-time formulation. The engineering defaults below are starting assumptions, not fitted physiology or a claim of exact reproduction of a published model. [05]",
+        "Initial defaults: dt = 1 ms; resting/reset potential = -52 mV; threshold = -45 mV; membrane time constant = 20 ms; synaptic time constant = 5 ms; refractory interval = 2 ms; transmission delay = 2 ms; contact-to-jump scale = 0.275 mV. These defaults require stability and sensitivity checks before freeze.",
+        {
+          "h": "Update convention"
+        },
+        "At tick k, decay the synaptic state, then add the weighted spikes emitted d ticks earlier: s[k] = exp(-dt/tau_s) s[k-1] + W z[k-d]. Update v using forward Euler: v[k] = v[k-1] + dt/tau_m * (v_rest - v[k-1]) + s[k] + external[k]. Here external is a per-tick voltage increment. Threshold, reset and refractory handling follow that update. Record this convention because alternatives change effective gain.",
+        "Refractory neurons continue accumulating synaptic state but do not integrate voltage or emit spikes until their counter expires. Initial membrane potentials equal rest; synaptic states and delay buffers begin at zero. Each independent trial resets all state. Background drive, if introduced, is explicitly seeded and matched across arms.",
+        {
+          "h": "Transmitter policy"
+        },
+        "Initial policy: acetylcholine positive; GABA negative; glutamate negative as an approximation requiring sensitivity analysis; dopamine, serotonin, octopamine and unknown labels contribute zero fast signed weight unless a later explicit model is supplied. Store the anatomical graph separately so zeroed fast weights are visible, not silently discarded.",
+        {
+          "note": "This model omits dendrites, receptor dynamics, graded transmission and neuromodulation. Retinal drive and point-neuron assumptions are substantial limitations for motion circuitry. Failure can motivate a new model version; it cannot justify hidden post-hoc changes."
+        }
+      ]
+    },
+    {
+      "title": "Stimuli and trial schedule",
+      "content": [
+        {
+          "h": "Development versus evaluation"
+        },
+        "Development seeds: 0-4. Reserved evaluation seeds: 100-119. A seed defines matched stimulus phase and any stochastic drive across graph arms, not a different biological specimen. Seed 9000 is reserved for infrastructure fixtures and cannot enter scientific summaries.",
+        "Planned evaluation trial: 0.5 s baseline, 1.0 s stimulus, 0.5 s recovery, sampled at the neural integration step. Reset the model between trials. Randomize condition order within each paired seed. Main conditions are leftward motion, rightward motion, stationary pattern and uniform mean-luminance input.",
+        {
+          "h": "Stimulus definition"
+        },
+        "Use a sinusoidal grating L(x,t) = 0.5 * [1 + c * sin(2*pi*(f*x - q*t) + phase)]. Coordinates x are normalized visual-field coordinates until an angular calibration is justified. The sign of q sets direction. Initial main setting: contrast c = 0.8, spatial frequency f = 4 cycles per field, temporal frequency |q| = 2 Hz. Stationary has q = 0; uniform has c = 0.",
+        "The encoder receives rendered luminance only. It must not receive the condition label, q, reward, action target or a precomputed motion direction. Input gains and any preprocessing are frozen with the mapping. This prevents the desired answer from being directly injected as neural activity.",
+        {
+          "h": "Secondary sensitivity grid"
+        },
+        "After the main comparison, test contrast {0.2, 0.5, 0.8} and temporal frequency {0.5, 1, 2, 4} Hz. These are robustness measurements, not extra independent confirmations. A change in spatial mapping or dynamics after observing the main evaluation requires a new held-out evaluation set and protocol version.",
+        {
+          "note": "Before a full trial schedule, run short infrastructure and stability pilots. Those pilots measure loading, numerical health and throughput. They are not evidence that the full motion experiment has succeeded."
+        }
+      ]
+    },
+    {
+      "title": "Controls and fair comparisons",
+      "content": [
+        {
+          "h": "A - Anatomical wiring"
+        },
+        "The retained graph, documented signs and fixed model parameters form the baseline. Counts and hashes must match the audited import. No reward or plasticity is enabled.",
+        {
+          "h": "B - Connectivity null"
+        },
+        "Use directed double-edge swaps, restricted within presynaptic transmitter classes, to preserve each node's in-degree and out-degree and the sign of its outgoing edges. Carry edge weights with their sources so the per-source weight multiset is preserved. Reject invalid duplicate connections and disallowed self-loops. This does not preserve each postsynaptic weighted input sum; report that limitation and summary distributions.",
+        "For each evaluation seed, create an independently rewired graph. Target 10 successful swaps per retained edge where feasible; log attempted/accepted swaps, residual overlap, convergence diagnostics and unchanged edges. If that mixing budget is impractical or insufficient, revise the null before evaluation rather than calling a simple ID permutation equivalent.",
+        {
+          "h": "C - Targeted silencing"
+        },
+        "Clamp predefined T4/T5 spike outputs to zero throughout a trial. Record the exact IDs and count. Compare downstream readouts; do not use the silenced population's own zero response as evidence of a specific downstream effect. Include a size-matched control ablation as a secondary check if global activity collapse complicates interpretation.",
+        {
+          "h": "D - Input controls"
+        },
+        "Stationary and uniform inputs retain mean brightness while removing coherent temporal motion. Left/right reversal tests directional consistency. Input-array checksums establish that paired graph arms receive the same stimulus and noise, without unequal normalization or gain tuning.",
+        {
+          "note": "A null result under global inactivity or saturation is uninterpretable as selective motion processing. Record population rates, silent fractions, threshold saturation and input/output coverage in every arm."
+        }
+      ]
+    },
+    {
+      "title": "Endpoints and analysis rules",
+      "content": [
+        {
+          "h": "Primary neural endpoint"
+        },
+        "For each independently defined direction-selective population, calculate mean firing rates during 0.2-1.0 s after stimulus onset. Define DSI = (R_preferred - R_opposite) / (R_preferred + R_opposite + 1 Hz). The preferred direction comes from the frozen mapping, never from whichever response is larger. Average the prespecified populations with equal weights to obtain one score per graph arm and paired seed.",
+        "Primary comparison: anatomical score minus its matched rewired score across 20 seed pairs. Report all pairs, the mean difference and a 95% percentile bootstrap interval from 10,000 resamples of whole pairs. The seed pair is the computational replication unit; neurons and time bins are not independent replicates. The interval does not measure population variation among living flies.",
+        {
+          "h": "Prospective decision criteria"
+        },
+        "An engineering-level directional result requires mean anatomical DSI > 0.10, its bootstrap interval above zero, and the anatomical-minus-null interval above zero. The 0.10 threshold is a declared practical criterion, not an established biological effect size. Twenty pairs are a feasibility choice; there is no completed prospective power analysis. Otherwise classify the outcome as negative, inconclusive or invalid according to diagnostics.",
+        {
+          "h": "Secondary outcomes"
+        },
+        "Report downstream silencing effects; virtual turning direction and magnitude; response latency using a frozen threshold rule; robustness across contrast/frequency; simulated seconds per wall-clock second; peak memory; and numerical failure counts. Secondary analyses are descriptive unless a multiplicity-aware plan is added before evaluation.",
+        {
+          "h": "Exclusion and failure rules"
+        },
+        "Exclude only predeclared infrastructure failures: nonfinite values, incomplete writes, mismatched manifests or inputs, invalid graph/mapping, and interrupted execution. Keep silent, saturated, weak or wrong-direction responses as outcomes, marked with diagnostics. Do not stop early for a favorable trace or rerun only bad seeds."
+      ]
+    },
+    {
+      "title": "Verification, UI and run records",
+      "content": [
+        {
+          "h": "Before interpreting a neural result"
+        },
+        "Use small analytical networks to check zero-input stability, direction of edge propagation, excitatory/inhibitory sign, transmission delay, refractory timing and reset behavior. Compare full voltage/spike trajectories from CPU and CUDA under identical inputs, with explicit tolerances and threshold-boundary cases. GPU memory failure must fail a run; there is no silent fallback to a mock model.",
+        "Benchmark a full retained graph separately from fixtures. Report graph size, time-step count, warm-up, synchronization, loading time, steady-state execution time and recording overhead. Do not infer real-time capacity from advertised AI throughput or from an empty network.",
+        {
+          "h": "Mac dashboard"
+        },
+        "Display run ID, source digest, dataset, graph population, backend, stimulus, selected population activity, rate summaries, virtual heading and control condition. Mark fixture, development and evaluation modes clearly. Distinguish simulated time from elapsed wall time. Telemetry should survive a browser refresh and reflect archived data rather than decorative animation.",
+        "The service binds to loopback on a GX10 and is reached through SSH forwarding. The browser is a display; run commands and configuration files are the reproducible control surface. Both hosts execute code from the same verified source snapshot.",
+        {
+          "h": "Required run products"
+        },
+        "manifest.json records data/config/source hashes, hardware, software, seeds and status. Graph audit records retained IDs and sign coverage. Store stimulus specification and input hashes, population spike/rate traces, metrics, solver diagnostics, start/end times and the executed command. Save only selected high-resolution traces by default and state the recording policy.",
+        {
+          "note": "Before Git exists, a sorted file-hash manifest supplies source identity. It cannot recover absent source files by itself, so each accepted run must refer to a preserved source snapshot or archive as well as its digest."
+        }
+      ]
+    },
+    {
+      "title": "Release checklist and references",
+      "content": [
+        {
+          "h": "Status at protocol publication"
+        },
+        "Hardware access and CUDA-toolkit availability have been verified. No project solver, mapped visual experiment, behavioral measurement or learning result exists at this document's initial publication. Implementation will begin after PDF review. Progress will be recorded in the project status file and later protocol amendments.",
+        {
+          "h": "Required before evaluation"
+        },
+        "(1) Audited dataset and licenses. (2) Validated retinal and readout mappings. (3) CPU/CUDA correctness evidence. (4) Stable development dynamics. (5) Verified null-generation invariants and mixing. (6) Frozen model, decoder, metrics and configuration. (7) A dated amendment preserving this original edition. Only then run reserved seeds 100-119.",
+        {
+          "h": "What can be reported first"
+        },
+        "A successfully compiled GPU kernel, agreement with a reference, reproducible deployment and a working telemetry UI are valid engineering results. An imported real graph can support a loading audit and benchmark before the retinal mapping is complete. None should be relabeled as an optomotor response or a learned behavior.",
+        {
+          "h": "References"
+        },
+        {
+          "refs": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "note": "Progressive series: preserve exp_1 v0.1; add a freeze amendment and results report when warranted; write exp_2 before enabling a defined learning mechanism. Deviations must state when they were made and which results were already visible."
+        }
+      ]
+    },
+    {
+      "title": "Interactive workbench: engineering amendment",
+      "content": [
+        {
+          "note": "19 September 2026. Added after interactive engineering observations, before any confirmatory motion evaluation. This amendment documents an exploration tool; it does not freeze the model or satisfy the scientific gates."
+        },
+        {
+          "h": "Controls and observed quantities"
+        },
+        "The Mac browser controls CUDA execution on gx10-a. It offers blank, uniform, moving-grating, spot and hand-painted 32 x 24 inputs; left/right input selection; bounded neural pulses; Run, Pause, Step, Reset and Finish. A session stops and saves at 10 seconds of simulated time. There is no reward, learning or motor decoder.",
+        "The full retained graph contains 166,700 neurons and 25,582,938 directed edges. The anatomy view displays 5,028 sampled annotated soma/tosoma landmarks, colored by measured model firing rates. Population rates, 40 sampled spike trains and a selected neuron's voltage and strongest modeled inputs make the response inspectable. The view is neither complete morphology nor biological neural recording.",
+        {
+          "h": "Input mapping remains exploratory"
+        },
+        "Exactly 1,767 of 1,776 annotated L1 neurons have usable assignedOlHex1/2 coordinates (875 left, 892 right). Each eye is independently min-max normalized to the displayed input grid. This directly drives L1 cells; photoreceptor transduction, optical geometry and eye mirror conventions are not established. Soma side identifies response groups and does not prove steering direction.",
+        {
+          "h": "Evidence and limits"
+        },
+        "Engineering checks verified visible input delivery, neuron search/pulses, pause, reset and saved records. A left-eye grating produced L1 spikes. In development run 20260919T172706Z-interactive-c6d167, a subsequent 1.5 mV/tick, 20 ms pulse to T4a neuron 13882 produced widespread activity; the final 20 ms network rate reached about 46.56 Hz and mean voltage about -419.22 mV at 620 ms. These nonphysiological voltages reinforce the outstanding stability gate. This is not evidence of visual recognition, steering or learning.",
+        "Each run stores source and data identities, initial input, exact tick-stamped commands, input digest, response summaries, sampled raster and all-neuron total spike counts. Exploratory evidence is retained. Evaluation seeds, a validated encoder, connectivity null and model freeze remain future work. PDFs live only in the Mac PLAN folder; code releases and run evidence live separately."
+      ]
+    }
+  ],
+  "references": {
+    "1": [
+      "Bahl et al. Object tracking in motion-blind flies. Nature Neuroscience (2013).",
+      "https://doi.org/10.1038/nn.3386"
+    ],
+    "2": [
+      "Connectome-constrained networks predict neural activity across the fly visual system. Nature (2024).",
+      "https://doi.org/10.1038/s41586-024-07939-3"
+    ],
+    "3": [
+      "MaleCNS v1.0: authoritative data inventory.",
+      "https://male-cns.janelia.org/download/"
+    ],
+    "4": [
+      "MaleCNS supplemental analyses and visual-column data.",
+      "https://github.com/flyconnectome/2025malecns"
+    ],
+    "5": [
+      "Shiu et al. A Drosophila computational brain model reveals sensorimotor processing. Nature (2024).",
+      "https://doi.org/10.1038/s41586-024-07763-9"
+    ],
+    "6": [
+      "Berg et al. Complete male central nervous system connectome. Cell (2026).",
+      "https://doi.org/10.1016/j.cell.2026.08.015"
+    ]
+  },
+  "version": "0.2",
+  "footer": "Protocol + engineering amendment | No confirmatory behavioral result"
+}

@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fruitflybrain"
+version = "0.2.0"
+description = "Auditable MaleCNS simulation experiments on CPU or NVIDIA CUDA"
+requires-python = ">=3.11,<3.14"
+dependencies = ["numpy==2.2.6", "pyarrow==19.0.1", "scipy==1.15.3"]
+
+[project.scripts]
+fruitflybrain = "fruitflybrain.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
