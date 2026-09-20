@@ -34,3 +34,7 @@ The initial failed import's partial graph is retained remotely as `data/malecns-
 ## Read-only neural anatomy explorer (20 September 2026)
 
 The explorer adds annotated landmark positions, population counts, selected experimental L1 inputs/readouts, ID/type search and directed anatomical neighbors. It does not assign a natural motor decoder or change either experiment's neural dynamics, learning rule or checkpoint. Unknown positions are not fabricated; visual sampling is explicit. Biological L1 uses graded responses, so our uniform spiking approximation remains unvalidated for that cell type. The lab explorer can run separately on gx10-b/8768 to preserve ongoing experiment sessions; newly started Exp 2 services also offer /network.
+
+## Fresh-install viewer clarification (20 September 2026)
+
+Reproduced the reported parallel slashes using the default setup.sh CPU demo. They were invented grid coordinates projected nearly edge-on, not missing MaleCNS data. The demo now uses an explicitly labeled 2D grouping by synthetic cell type and side, retaining node IDs and measured activity; real-data projection and all neuron dynamics are unchanged. The README now separates all three launch paths, demo versus real data, expected visuals, resource requirements and update steps. setup_explorer.sh reuses the existing installer and launches only the read-only explorer. The Experiment 1 UI correction is authorized by the user's report; the original baseline remains tagged.

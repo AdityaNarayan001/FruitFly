@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_DIRS = ('src', 'native', 'scripts', 'configs', 'tests', 'ui')
-SOURCE_FILES = ('setup.sh', 'setup_exp_2.sh', 'pyproject.toml', 'requirements.lock', 'README.md', 'STATUS.md', 'AGENTS.md', '.gitignore')
+SOURCE_FILES = ('setup.sh', 'setup_exp_2.sh', 'setup_explorer.sh', 'pyproject.toml', 'requirements.lock', 'README.md', 'STATUS.md', 'AGENTS.md', '.gitignore')
 
 def sha256(path):
     h = hashlib.sha256()
@@ -60,7 +60,7 @@ def preserve_source(runs,manifest):
             for name,digest in manifest['files'].items():
                 payload=(ROOT/name).read_bytes()
                 if hashlib.sha256(payload).hexdigest()!=digest:raise ValueError('Source changed while the service was running; restart before recording a new session')
-                info=tarfile.TarInfo(name);info.size=len(payload);info.mode=0o755 if name=='setup.sh' else 0o644
+                info=tarfile.TarInfo(name);info.size=len(payload);info.mode=0o755 if name in ('setup.sh','setup_exp_2.sh','setup_explorer.sh') else 0o644
                 archive.addfile(info,io.BytesIO(payload))
             payload=(json.dumps(manifest,indent=2)+'\n').encode();info=tarfile.TarInfo('SOURCE_MANIFEST.json');info.size=len(payload);archive.addfile(info,io.BytesIO(payload))
         Path(tmp).replace(dest)

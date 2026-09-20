@@ -78,7 +78,7 @@ class Atlas:
                 'groups':[{'key':k,'count':len(v)} for k,v in self.groups.items()],
                 'regions':REGIONS,'display_count':len(self.display_ids),
                 'points':self.positions.round(5).tolist(),'point_ids':self.graph.ids[self.display_ids].astype(str).tolist(),
-                'point_types':self.types[self.display_ids].tolist(),'point_regions':self.region[self.display_ids].tolist(),
+                'point_types':self.types[self.display_ids].tolist(),'point_sides':self.sides[self.display_ids].tolist(),'point_regions':self.region[self.display_ids].tolist(),
                 'raster_ids':self.graph.ids[self.raster_ids].astype(str).tolist(),'raster_types':self.types[self.raster_ids].tolist(),
                 'view_note':'Synthetic node positions; not anatomy or connectome data.' if self.synthetic else 'Sampled annotated cell landmarks in reconstructed coordinates; not neuron meshes, complete connectivity or live tissue.'}
 

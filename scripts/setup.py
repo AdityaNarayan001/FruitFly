@@ -7,19 +7,22 @@ ROOT=Path(__file__).resolve().parents[1]
 def call(args,env=None):subprocess.run([str(a) for a in args],cwd=ROOT,env=env,check=True)
 def main():
     parser=argparse.ArgumentParser(description='Install and start FruitFlyBrain. Default: small synthetic CPU demo.')
+    parser.add_argument('--app',choices=['exp1','explorer'],default='exp1',help='Interface to launch; setup_explorer.sh selects explorer')
     parser.add_argument('--backend',choices=['cpu','cuda','auto'],default='cpu')
     parser.add_argument('--dataset',choices=['demo','male-cns'],default='demo')
-    parser.add_argument('--port',type=int,default=8765)
+    parser.add_argument('--port',type=int,default=None)
     parser.add_argument('--no-start',action='store_true',help='Install, prepare data and verify; do not start the server')
     parser.add_argument('--venv',type=Path,default=ROOT/'.venv')
     parser.add_argument('--data-dir',type=Path,default=ROOT/'data')
     parser.add_argument('--runs-dir',type=Path,default=ROOT/'runs/local')
     a=parser.parse_args()
+    if a.port is None:a.port=8768 if a.app=='explorer' else 8765
     if not (3,11)<=sys.version_info[:2]<(3,14):parser.error('Use Python 3.11-3.13; dependency wheels are pinned for these versions')
     if not 1<=a.port<=65535:parser.error('Port must be 1-65535')
     if not a.no_start:
         try:
-            with socket.socket() as s:s.bind(('127.0.0.1',a.port))
+            with socket.socket() as s:
+                s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1);s.bind(('127.0.0.1',a.port))
         except OSError:parser.error(f'Port {a.port} is in use. Choose --port 8876; no existing service was stopped.')
     a.venv=a.venv.expanduser().resolve();a.data_dir=a.data_dir.expanduser().resolve();a.runs_dir=a.runs_dir.expanduser().resolve()
     python=a.venv/('Scripts/python.exe' if os.name=='nt' else 'bin/python')
@@ -51,6 +54,7 @@ def main():
         graph=a.data_dir/'demo-v1'
         call([python,'-m','fruitflybrain.cli','demo','--output',graph],env)
         print('Dataset: SYNTHETIC 256-node teaching fixture. This is not the MaleCNS connectome.',flush=True)
+        print('The demo viewer shows an invented circuit grid, not a brain shape. For actual anatomy, rerun with --dataset male-cns.',flush=True)
     else:
         graph=a.data_dir/'malecns-graph-v1'
         if not graph.exists():
@@ -61,14 +65,20 @@ def main():
             call([python,'-m','fruitflybrain.cli','download','--data',raw],env)
             call([python,'-m','fruitflybrain.cli','import','--data',raw,'--output',graph],env)
         call([python,'-c','from fruitflybrain.graph import Graph; import sys; g=Graph.load(sys.argv[1]); assert g.metadata.get("dataset")=="male-cns:v1.0"; print("Verified real graph:",g.n,"neurons,",g.m,"edges")',graph],env)
-    a.runs_dir.mkdir(parents=True,exist_ok=True)
-    print(f'\nSetup verified. Backend: {backend}; graph: {graph}\nRun records: {a.runs_dir}',flush=True)
+    if a.app=='explorer':
+        command=[str(python),'-m','fruitflybrain.explorer','--graph',str(graph),'--port',str(a.port)]
+        url=f'http://127.0.0.1:{a.port}/network'
+        print(f'\nSetup verified. Read-only anatomy explorer; graph: {graph}\nNo neural simulation or training is started.',flush=True)
+    else:
+        a.runs_dir.mkdir(parents=True,exist_ok=True)
+        command=[str(python),'-m','fruitflybrain.cli','serve','--graph',str(graph),'--runs',str(a.runs_dir),'--backend',backend,'--port',str(a.port)]
+        url=f'http://127.0.0.1:{a.port}/'
+        print(f'\nSetup verified. Backend: {backend}; graph: {graph}\nRun records: {a.runs_dir}',flush=True)
     if a.no_start:
         import shlex
-        command=[str(python),'-m','fruitflybrain.cli','serve','--graph',str(graph),'--runs',str(a.runs_dir),'--backend',backend,'--port',str(a.port)]
         print('Start later from this checkout:\n'+shlex.join(command));return
-    print(f'Open http://127.0.0.1:{a.port}/ in your browser. Leave this terminal open; Ctrl+C stops the service.',flush=True)
-    os.execve(str(python),[str(python),'-m','fruitflybrain.cli','serve','--graph',str(graph),'--runs',str(a.runs_dir),'--backend',backend,'--port',str(a.port)],env)
+    print(f'Open {url} in your browser. Leave this terminal open; Ctrl+C stops the service.',flush=True)
+    os.execve(str(python),command,env)
 
 if __name__=='__main__':
     try:main()
