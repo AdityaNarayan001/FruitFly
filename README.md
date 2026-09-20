@@ -69,6 +69,30 @@ PYTHONPATH=src ../../.venv/bin/python -m fruitflybrain.exp2 \
 ssh -N -L 8767:127.0.0.1:8767 gx10-b
 ```
 
+## Explore the annotated neural network
+
+Newly started Experiment 2 services expose **Explore neural anatomy** at `/network` on the same port. The explorer shares the already loaded graph and never stimulates neurons, changes Q values, or creates training runs.
+
+To inspect anatomy independently, without restarting either experiment:
+
+```sh
+# After setup has prepared the selected dataset:
+.venv/bin/python -m fruitflybrain.explorer --graph data/demo-v1 --port 8768
+# Replace data/demo-v1 with data/malecns-graph-v1 for the actual connectome.
+```
+
+Open `http://127.0.0.1:8768/network`. For a remote server, forward the same port through SSH. This read-only data service runs on the server CPU; the Mac renders the visualization. It does not run new neural dynamics on the GPU.
+
+- Rotate the landmark map by dragging; use the zoom buttons or Reset camera. Switch View to Selected connections for a schematic of incoming partners, the selected neuron and outgoing partners. This diagram also includes cells without anatomical positions; reciprocal partners may appear on both sides.
+- Filter anatomical populations or highlight the experiment's selected L1 inputs and readouts. A pink ring marks cells used for **both** roles.
+- Click a dot, or search an exact neuron ID, type such as L1/T4, or superclass such as descending_neuron. Search includes neurons omitted from the display sample.
+- Inspect up to 20 incoming and 20 outgoing connections, ranked by recorded synaptic-contact count when available. Arrow direction is relative to the selected neuron. Zero assumed model weight does not remove an anatomical connection.
+- The overview includes all located experimental L1 cells plus up to 600 located cells per broad anatomical group. Population counts cover the full loaded graph. Cells without somaLocation/tosomaLocation remain searchable; their positions are never fabricated. Lines join cell landmarks, not neuron arbors or physical synapse locations.
+
+The retained MaleCNS annotations contain 815 `cb_motor`/`vnc_motor` neurons and 1,314 `descending_neuron` cells. These categories are distinct, and Experiment 2 uses neither as an avatar motor decoder. Processing is distributed; the graph is not organized into a fixed number of ANN hidden layers. Artificial recurrent networks can also have feedback.
+
+**Biological limitation:** L1 is a lamina neuron type, not layer 1. Biological L1 uses graded voltage responses; our uniform spiking model is not a faithful L1 physiology model. See the [L1 physiology paper](https://pmc.ncbi.nlm.nih.gov/articles/PMC3806040/), [MaleCNS annotations](https://male-cns.janelia.org/), and [descending pathway description](https://www.janelia.org/project-team/fly-descending-interneuron). Colors describe annotation groups, not verified task computations or live activity.
+
 ## Use the actual MaleCNS graph
 
 ```sh

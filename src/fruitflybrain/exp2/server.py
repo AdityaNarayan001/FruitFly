@@ -7,9 +7,10 @@ import json,re,secrets,threading,signal
 from ..provenance import ROOT
 from .session import Session
 from .core import make_maze
+from ..explorer import NetworkRoutes,NetworkView
 
 class Handler(BaseHTTPRequestHandler):
-    def __init__(self,*args,session,token,**kwargs):self.session=session;self.token=token;super().__init__(*args,**kwargs)
+    def __init__(self,*args,session,token,network,**kwargs):self.session=session;self.token=token;self.network=network;super().__init__(*args,**kwargs)
     def send(self,payload,mime='application/json',status=200,attachment=None):
         if not isinstance(payload,bytes):payload=json.dumps(payload,allow_nan=False).encode()
         self.send_response(status);self.send_header('Content-Type',mime);self.send_header('Content-Length',str(len(payload)))
@@ -19,6 +20,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path=urlsplit(self.path).path
         try:
+            network=self.network.get(self.path)
+            if network is not None:return self.send(network[0],network[1])
             if path in ('/','/index.html','/app.js','/style.css'):
                 name='index.html' if path=='/' else path[1:];mime={'html':'text/html; charset=utf-8','js':'text/javascript','css':'text/css'}[name.split('.')[-1]]
                 return self.send((ROOT/'ui/exp2'/name).read_bytes(),mime)
@@ -52,7 +55,11 @@ class Handler(BaseHTTPRequestHandler):
 
 def serve(graph,runs,backend='cpu',port=8767):
     session=Session(graph,runs,backend)
-    try:server=ThreadingHTTPServer(('127.0.0.1',port),partial(Handler,session=session,token=secrets.token_urlsafe(32)))
+    def network_view():
+        if session.encoder is None:raise ValueError('Neural dataset is still loading')
+        return NetworkView(session.encoder.g,session.encoder.atlas,graph)
+    network=NetworkRoutes(network_view)
+    try:server=ThreadingHTTPServer(('127.0.0.1',port),partial(Handler,session=session,token=secrets.token_urlsafe(32),network=network))
     except BaseException:session.close();raise
     def stop(*_):threading.Thread(target=server.shutdown,daemon=True).start()
     signal.signal(signal.SIGTERM,stop)

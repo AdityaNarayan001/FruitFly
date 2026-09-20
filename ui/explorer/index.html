@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FruitFlyBrain | Neural anatomy</title><link rel="stylesheet" href="/network.css"></head>
+<body>
+<header><div><div class="eyebrow">FRUITFLYBRAIN / CONNECTOME EXPLORER</div><h1>Inside the fly’s neural network.</h1><p>Locate the neurons. Follow their connections. Separate anatomy from our experiment.</p></div><span id="dataset" class="badge">Loading dataset</span></header>
+<div id="notice" role="status">Loading the annotated network…</div>
+<main>
+<section class="explanation" aria-label="How to interpret the network">
+<div><span class="eyebrow">BIOLOGICAL ORGANIZATION</span><h2>Sensory → circuits ↔ motor pathways</h2><p>Biological networks and recurrent artificial networks both contain feedback. Processing here is distributed across visual, central-brain and nerve-cord circuits. Descending and ascending pathways link them. The arrows here are a broad explanation, not a traced route or a fixed layer sequence.</p></div>
+<div><span class="eyebrow">EXPERIMENT 2 CHOICES</span><h2 id="experimentCounts">L1 input = L1 readout</h2><p>Image → direct L1 stimulation → 32 averaged responses → external Q-learning → four movement choices. <strong>No motor neurons drive the avatar.</strong> L1 is a cell type, not “layer 1.”</p></div>
+</section>
+<div class="workspace">
+<section class="viewer panel">
+<div class="toolbar"><label>View<select id="layout"><option value="anatomy">Anatomical landmarks</option><option value="schematic">Selected connections</option></select></label><label>Highlight<select id="mode"><option value="anatomy">Anatomical roles</option><option value="experiment">Experiment 2 input / readout</option></select></label><label>Show<select id="filter"><option value="all">All groups</option><option value="input">Selected L1 inputs / readout</option></select></label><button id="reset">Reset camera</button></div>
+<div class="canvaswrap"><canvas id="brain" aria-label="Rotatable neural landmark map. Drag to rotate, use zoom buttons, and click a neuron to inspect its directed connections."></canvas><div id="hover" aria-live="polite">Drag to rotate · click a dot to inspect</div><div class="zoom"><button id="zoomOut" aria-label="Zoom out">−</button><button id="zoomIn" aria-label="Zoom in">+</button></div></div>
+<p class="small" id="layoutNote">Anatomical view: recorded cell landmarks, with a uniform coordinate transform.</p><div class="viewmeta"><span id="coverage"></span><span>Dataset coordinate axes · X / Y / Z</span></div>
+<p class="small" id="sampleNote"></p>
+<div class="linelegend"><span><i class="incoming"></i>Arrow into selected neuron</span><span><i class="outgoing"></i>Arrow out of selected neuron</span><span><i class="inputdot"></i>L1 input + readout (pink ring)</span></div>
+<p class="small">Anatomical dots are cell landmarks, not complete neuron shapes. The selected-connections view uses a schematic layout, including cells without positions. Neither view draws physical axon paths.</p>
+</section>
+<aside class="panel inspector">
+<div class="eyebrow">INSPECT ONE NEURON</div><form id="searchForm"><label for="search">Neuron type, superclass or exact ID</label><div class="searchrow"><input id="search" placeholder="L1, T4, descending_neuron…" autocomplete="off"><button type="submit">Search</button></div></form><div id="results"></div>
+<div id="selection"><p>Select a dot or search for a neuron.</p></div>
+<label class="check"><input type="checkbox" id="connections" checked> Show selected neuron’s connections</label>
+<div id="neighbors"></div>
+</aside>
+</div>
+<section class="panel"><div class="sectionhead"><div><div class="eyebrow">ANNOTATED POPULATIONS</div><h2>Where inputs, processing and outputs sit</h2></div><span id="totals"></span></div><p class="small">Counts include the entire loaded graph. Dot samples show only cells with available coordinates. Click a category to isolate it; processing labels describe broad circuits, not a proven task computation.</p><div id="roles" class="roles"></div></section>
+<section class="notes"><div><h2>What the picture can establish</h2><p>The annotated type of a neuron, its available location, and its recorded connections. “Incoming” and “outgoing” are relative to the selected neuron; most internal neurons have both.</p></div><div><h2>What it cannot establish</h2><p>Which neuron represents a thought or makes a maze decision. This is a static anatomical view, not live activity. Our generic model treats L1 as spiking, while biological L1 chiefly uses graded voltage changes; its simulated firing is not validated L1 physiology.</p></div></section>
+<footer><a href="https://male-cns.janelia.org/" target="_blank" rel="noopener">MaleCNS annotation source ↗</a><a href="https://www.janelia.org/project-team/fly-descending-interneuron" target="_blank" rel="noopener">Descending pathways ↗</a><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3806040/" target="_blank" rel="noopener">L1 physiology ↗</a><span>Read-only explorer. Viewing never stimulates neurons or trains a policy.</span></footer>
+</main><script src="/network.js"></script>
+</body></html>
