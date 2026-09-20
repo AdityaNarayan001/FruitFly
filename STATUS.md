@@ -38,3 +38,7 @@ The explorer adds annotated landmark positions, population counts, selected expe
 ## Fresh-install viewer clarification (20 September 2026)
 
 Reproduced the reported parallel slashes using the default setup.sh CPU demo. They were invented grid coordinates projected nearly edge-on, not missing MaleCNS data. The demo now uses an explicitly labeled 2D grouping by synthetic cell type and side, retaining node IDs and measured activity; real-data projection and all neuron dynamics are unchanged. The README now separates all three launch paths, demo versus real data, expected visuals, resource requirements and update steps. setup_explorer.sh reuses the existing installer and launches only the read-only explorer. The Experiment 1 UI correction is authorized by the user's report; the original baseline remains tagged.
+
+## Real connectome default (20 September 2026)
+
+Following the user's preference for the original Experiment 1 brain view, all three launchers now default to MaleCNS. Plain setup.sh prepares the real dataset and displays its existing rotatable 3D brain landmarks; the grouped synthetic view requires an explicit --dataset demo. Real-data preparation failures do not fall back to demo data. README commands and first-run resource requirements reflect this default. Rendering, neural dynamics, saved runs and the external learning rule are unchanged.

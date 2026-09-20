@@ -2,7 +2,7 @@
 
 A local, interactive workbench for connectome-based neural experiments. Draw an input, send a neural pulse, inspect model activity, and save an auditable session. It runs on a **CPU** or, on compatible Linux systems, **NVIDIA CUDA**.
 
-**Scientific status:** exploratory software. Experiment 1 has no learning or validated motor decoder; Experiment 2 trains an external Q-learning controller while keeping neural weights fixed. The real-data input map and dynamics still need biological validation; strong pulses can produce unrealistic voltages. The default installation is a prominently labeled **synthetic 256-node teaching demo**, not the fly connectome.
+**Scientific status:** exploratory software. Experiment 1 has no learning or validated motor decoder; Experiment 2 trains an external Q-learning controller while keeping neural weights fixed. The real-data input map and dynamics still need biological validation; strong pulses can produce unrealistic voltages. The default installation uses the **real MaleCNS connectome** and preserves Experiment 1's rotatable brain landmark view.
 
 ## Clone once and choose a dataset
 
@@ -15,18 +15,18 @@ cd FruitFly
 
 All commands below run from this folder. Each launcher creates or reuses `.venv`, installs pinned dependencies and prepares the selected dataset. Keep its terminal open; **Ctrl+C stops that service**. Open the printed URL manually in your browser.
 
-**Plain `sh setup.sh` starts a software demo, not the real fly brain.** Choose the dataset explicitly if you want actual anatomy:
+**Plain `sh setup.sh` starts with the real fly connectome and its 3D brain landmarks.** All three launchers default to real data; the small synthetic circuit is available only when explicitly requested:
 
 | Dataset | What you get | Option |
 | --- | --- | --- |
-| Demo (default) | 256 invented neurons in a labeled schematic grid; quick CPU test | `--dataset demo` |
-| MaleCNS | 166,700 retained neurons from the real connectome; annotated brain/CNS landmarks | `--dataset male-cns` |
+| MaleCNS (default) | 166,700 retained neurons from the real connectome; annotated brain/CNS landmarks | No option needed, or `--dataset male-cns` |
+| Optional demo | 256 invented neurons in a labeled schematic grid; quick CPU test | `--dataset demo` |
 
 Real-data preparation downloads about **1.1 GB** and needs **at least 16 GB RAM (32 GB recommended)** and **6 GiB free disk**, plus space for records. Full-graph CPU simulation can be slow. The anatomy explorer only reads the graph and does not run neural dynamics.
 
 ## Choose an interface
 
-These quick-start commands use the **synthetic demo**. Add `--dataset male-cns` for the real graph, as shown in the sections below.
+These quick-start commands use the **real connectome**. The first run downloads/prepares it; subsequent runs reuse it. Add `--dataset demo` only for a small synthetic software test.
 
 | Interface | Start command | Browser address | Purpose |
 | --- | --- | --- | --- |
@@ -34,7 +34,7 @@ These quick-start commands use the **synthetic demo**. Add `--dataset male-cns` 
 | Experiment 2 | `sh setup_exp_2.sh` | [localhost:8767](http://127.0.0.1:8767/) | Train and evaluate an external reward-learning maze controller |
 | Neural anatomy explorer | `sh setup_explorer.sh` | [localhost:8768/network](http://127.0.0.1:8768/network) | Inspect annotated populations, neuron locations and directed connections |
 
-Use a **separate terminal for each service** if you want all three open. They reuse the environment and prepared dataset. Stop only the terminal belonging to the service you want to stop. No account, API key, SSH alias, Node.js installation or NVIDIA GPU is required for the CPU demo; internet is needed for first-time installation and any requested data download.
+Use a **separate terminal for each service** if you want all three open. They reuse the environment and prepared dataset. Stop only the terminal belonging to the service you want to stop. No account, API key, SSH alias, Node.js installation or NVIDIA GPU is required for CPU mode; internet is needed for first-time installation and any requested data download.
 
 ## Experiment 1: visual input and neural response
 
@@ -67,7 +67,7 @@ For the real connectome on CPU, or the quick demo:
 ```sh
 sh setup_exp_2.sh --dataset male-cns --backend cpu
 # Or the small synthetic demo:
-sh setup_exp_2.sh
+sh setup_exp_2.sh --dataset demo
 ```
 
 On a supported NVIDIA Linux server:
@@ -101,7 +101,7 @@ sh setup_explorer.sh --dataset male-cns
 For the small synthetic teaching graph:
 
 ```sh
-sh setup_explorer.sh
+sh setup_explorer.sh --dataset demo
 ```
 
 Open [the neural explorer](http://127.0.0.1:8768/network). No CUDA backend is needed: the service reads anatomy on the server CPU and the browser renders the view. It never stimulates neurons, trains a policy or creates an experiment run.
@@ -134,7 +134,7 @@ sh setup.sh --dataset male-cns --backend cpu
 
 Refresh the browser after restarting. Check that the badge says **MaleCNS** and the count is **166,700 modeled neurons**. If it says **SYNTHETIC DEMO** and **256**, you are still running the demo. The real viewer shows sampled neuron landmarks, not a solid brain surface or complete neuron meshes.
 
-The default `sh setup.sh` always selects the demo, even after real data has been downloaded. Keep `--dataset male-cns` in the command when restarting any interface with real data. Existing verified data is reused; there is no need to delete it or saved runs.
+The current default `sh setup.sh` selects the real connectome, even if an older installation already has demo data. Experiment 2 and the standalone explorer use the same real-data default. `--dataset demo` is an explicit opt-in; setup never substitutes it if real-data preparation fails. Existing verified data is reused; there is no need to delete it or saved runs.
 
 ## Ports, Python and setup troubleshooting
 

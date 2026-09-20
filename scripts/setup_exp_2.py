@@ -4,8 +4,8 @@ import argparse,os,shlex,socket,subprocess,sys,shutil
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 def main():
-    p=argparse.ArgumentParser(description='Install and launch Experiment 2 on its own port')
-    p.add_argument('--backend',choices=['cpu','cuda','auto'],default='cpu');p.add_argument('--dataset',choices=['demo','male-cns'],default='demo')
+    p=argparse.ArgumentParser(description='Install and launch Experiment 2 on its own port. Default: real MaleCNS connectome on CPU.')
+    p.add_argument('--backend',choices=['cpu','cuda','auto'],default='cpu');p.add_argument('--dataset',choices=['demo','male-cns'],default='male-cns',help='Default: male-cns (real brain). Use demo only for the small synthetic teaching circuit.')
     p.add_argument('--port',type=int,default=8767);p.add_argument('--no-start',action='store_true')
     p.add_argument('--venv',type=Path,default=ROOT/'.venv');p.add_argument('--data-dir',type=Path,default=ROOT/'data');p.add_argument('--runs-dir',type=Path,default=ROOT/'runs/exp_2')
     a=p.parse_args()

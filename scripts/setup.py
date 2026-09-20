@@ -6,10 +6,10 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def call(args,env=None):subprocess.run([str(a) for a in args],cwd=ROOT,env=env,check=True)
 def main():
-    parser=argparse.ArgumentParser(description='Install and start FruitFlyBrain. Default: small synthetic CPU demo.')
+    parser=argparse.ArgumentParser(description='Install and start FruitFlyBrain. Default: real MaleCNS connectome on CPU; about 1.1 GB initial download.')
     parser.add_argument('--app',choices=['exp1','explorer'],default='exp1',help='Interface to launch; setup_explorer.sh selects explorer')
     parser.add_argument('--backend',choices=['cpu','cuda','auto'],default='cpu')
-    parser.add_argument('--dataset',choices=['demo','male-cns'],default='demo')
+    parser.add_argument('--dataset',choices=['demo','male-cns'],default='male-cns',help='Default: male-cns (real brain). Use demo only for the small synthetic teaching circuit.')
     parser.add_argument('--port',type=int,default=None)
     parser.add_argument('--no-start',action='store_true',help='Install, prepare data and verify; do not start the server')
     parser.add_argument('--venv',type=Path,default=ROOT/'.venv')
