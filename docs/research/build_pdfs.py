@@ -31,7 +31,7 @@ def render(doc):
         c.setFillColor(TEAL); c.setFont('Helvetica-Bold',9)
         c.drawString(44,H-43,'FRUITFLYBRAIN / RESEARCH SERIES')
         c.setFont('Helvetica',8); c.setFillColor(MUTED)
-        c.drawRightString(W-44,H-43,doc['code']+' | v'+doc.get('version','0.1')+' | 19 SEP 2026')
+        c.drawRightString(W-44,H-43,doc['code']+' | v'+doc.get('version','0.1')+' | '+doc.get('date_label','19 SEP 2026'))
         title = p(page['title'], ParagraphStyle('Title',parent=BODY,fontName='Helvetica-Bold',fontSize=25,leading=29))
         _,th=title.wrap(W-88,120); title.drawOn(c,44,H-70-th)
         c.setStrokeColor(TEAL); c.setLineWidth(2); c.line(44,H-84-th,W-44,H-84-th)
@@ -60,7 +60,9 @@ def render(doc):
     print(dest)
 
 if __name__=='__main__':
-    for path in sorted(Path(__file__).parent.glob('*.json')):
+    import sys
+    paths=[Path(__file__).parent/name for name in sys.argv[1:]] if len(sys.argv)>1 else sorted(Path(__file__).parent.glob('*.json'))
+    for path in paths:
         doc=json.loads(path.read_text())
         if doc.get('format')=='handbook':
             from build_handbook import render as render_handbook

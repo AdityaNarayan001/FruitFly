@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_DIRS = ('src', 'native', 'scripts', 'configs', 'tests', 'ui')
-SOURCE_FILES = ('setup.sh', 'pyproject.toml', 'requirements.lock', 'README.md', 'STATUS.md', 'AGENTS.md', '.gitignore')
+SOURCE_FILES = ('setup.sh', 'setup_exp_2.sh', 'pyproject.toml', 'requirements.lock', 'README.md', 'STATUS.md', 'AGENTS.md', '.gitignore')
 
 def sha256(path):
     h = hashlib.sha256()

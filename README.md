@@ -2,7 +2,7 @@
 
 A local, interactive workbench for connectome-based neural experiments. Draw an input, send a neural pulse, inspect model activity, and save an auditable session. It runs on a **CPU** or, on compatible Linux systems, **NVIDIA CUDA**.
 
-**Scientific status:** exploratory software, with no learning or validated motor decoder. The real-data input map and dynamics still need biological validation; strong pulses can produce unrealistic voltages. The default installation is a prominently labeled **synthetic 256-node teaching demo**, not the fly connectome.
+**Scientific status:** exploratory software. Experiment 1 has no learning or validated motor decoder; Experiment 2 trains an external Q-learning controller while keeping neural weights fixed. The real-data input map and dynamics still need biological validation; strong pulses can produce unrealistic voltages. The default installation is a prominently labeled **synthetic 256-node teaching demo**, not the fly connectome.
 
 ## Start in three steps
 
@@ -35,6 +35,39 @@ FFB_PYTHON=/path/to/python3.12 sh setup.sh
 ```
 
 On some Linux distributions, install the OS package providing `python3-venv` first. Setup does not invoke `sudo`, install a package manager, or modify system Python. Unsupported Python/OS combinations fail with an actionable message instead of changing the pinned dependencies.
+
+## Experiment 2: reward-guided maze learning
+
+Experiment 1 remains available through `setup.sh` on port 8765. Its original code and PDFs are preserved at Git tag `exp-1-v0.2`.
+
+```sh
+sh setup_exp_2.sh
+# Real graph on a supported NVIDIA Linux server:
+sh setup_exp_2.sh --dataset male-cns --backend cuda
+```
+
+Open `http://127.0.0.1:8767/`. The default uses the labeled synthetic CPU graph. The same `--backend`, `--dataset`, `--port`, `--venv`, `--data-dir`, `--runs-dir` and `--no-start` options apply. Experiment 2 defaults to `runs/exp_2`; it never starts or stops Experiment 1.
+
+The editable 9 x 9 arena has a fly avatar, a start and two food sites. Pattern A and B swap sites between trials. The agent must learn which pattern earns +1 and how to reach it; the wrong pattern gives -0.25, ordinary movement costs -0.01, and trials last at most 120 actions. Grid position, adjacent walls and both visible pattern beacons are engineered observations. This first version studies route learning, not unknown-maze search or realistic fly locomotion.
+
+- **Train / Pause / Step:** train an external tabular Q controller in bounded batches; pacing changes display speed only.
+- **Edit the maze:** place walls, start and food sites; Apply creates a new experiment with fresh learning and preserves the old record.
+- **Manual control:** arrows move the avatar without training; reset the trial before switching between manual and autonomous modes.
+- **Neural encoder:** two actual 40 ms reset probes stimulate mapped L1 columns; 32 measured spatial rate features feed a fixed template decoder. These deterministic probes are cached. Neural dynamics do not continuously advance as the avatar moves, and brain synapses do not learn.
+- **Matched control:** the same Q learner reads the images directly and trains on matched trial seeds. Equal performance is expected when decoded information is identical.
+- **Evaluate:** freezes Q and compares neural-cue Q, image-cue Q and random movement on familiar and unseen mazes. Unseen-layout performance measures the limits of route memory.
+- **Save / Restore:** save learned Q tables and the completed-episode count. Restore creates a new linked run, starts a fresh trial and checks encoder identity. Partial-trial state is excluded.
+
+The prospective protocol is `PLAN/exp_2.pdf`; its source was written before implementing learning. Records include source/graph/probe identities, commands, per-episode outcomes, frozen evaluation trials, source archives and checkpoints. No connectome advantage or biological learning follows from successful navigation alone.
+
+For the existing lab deployment, run on `gx10-b` from `FruitFlyBrain/current`:
+
+```sh
+PYTHONPATH=src ../../.venv/bin/python -m fruitflybrain.exp2 \
+  --graph ../../data/malecns-graph-v1 --runs ../../runs/exp_2 --backend cuda --port 8767
+# On the client Mac:
+ssh -N -L 8767:127.0.0.1:8767 gx10-b
+```
 
 ## Use the actual MaleCNS graph
 
@@ -98,7 +131,7 @@ Stop and restart the service after editing code. A running process already impor
 - **Controls:** Run for a bounded window, Pause at a chunk boundary, Step 20 ms, Reset or Finish & save. Sessions automatically finish at 10 seconds simulated time. Space and arrow shortcuts operate outside form fields.
 - **Saved View:** review recorded telemetry with control disabled. It is not full historical-state restoration.
 
-The real image encoder targets **1,767 of 1,776 L1 cells** with explicit column coordinates. It is **not calibrated fly vision**. There is no photoreceptor-transduction model, validated motor behavior, reward mechanism, language model or training loop.
+The real image encoder targets **1,767 of 1,776 L1 cells** with explicit column coordinates. It is **not calibrated fly vision**. Experiment 1 has no photoreceptor-transduction model, validated motor behavior, reward mechanism, language model or training loop. Experiment 2 adds the separate external controller described above.
 
 ## Reproducibility and tests
 
@@ -131,6 +164,7 @@ Use `FFB_PLAYWRIGHT=/path/to/playwright` or `FFB_CHROME=/path/to/chrome` if need
 
 - `PLAN/plan.pdf`: the comprehensive beginner handbook, with real dataset examples, neuroscience vocabulary, model equations, every control, worked exercises, setup, troubleshooting, glossary and references.
 - `PLAN/exp_1.pdf`: prospective visual-motion protocol and dated engineering amendment.
+- `PLAN/exp_2.pdf`: prospective reward-choice/maze protocol, learning rule, controls and checkpoint semantics.
 - `docs/research/`: editable document sources and builders. `evidence/dataset_samples.json` contains exact sample rows, schemas and source hashes.
 - `STATUS.md`: observed results, implementation milestones and outstanding scientific gates.
 
@@ -179,4 +213,4 @@ Legacy batch-engineering configs under `configs/` are retained for the original 
 
 MaleCNS is a collaboration involving Janelia/FlyEM, Cambridge, MRC-LMB and Google Research. See the [official dataset](https://male-cns.janelia.org/download/), [Cell paper](https://doi.org/10.1016/j.cell.2026.08.015) and [Google overview](https://research.google/blog/a-connectomics-milestone-mapping-the-complete-male-fruit-fly-brain/). Dataset CC-BY terms and dependency licenses remain separate. A project software license has not yet been selected; publishing the repository does not itself grant a software license.
 
-Before scientific visual-motion evaluation: validate mapping and model stability, define evidence-backed readout populations, implement the specified connectivity control, and record a dated freeze amendment. Write Experiment 2 before adding rewards or a learning rule. Numerical tests and a working UI do not establish biological validity.
+Before scientific visual-motion evaluation: validate mapping and model stability, define evidence-backed readout populations, implement the specified connectivity control, and record a dated freeze amendment. Experiment 2 has its own prospective protocol and does not remove Experiment 1's scientific gates. Numerical tests and a working UI do not establish biological validity.

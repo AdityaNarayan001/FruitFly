@@ -3,6 +3,7 @@
 | Document | Version | Date | Status |
 | --- | --- | --- | --- |
 | plan.pdf | 1.0 | 2026-09-19 | Beginner handbook: biology, data examples, full UI reference, portable setup and research roadmap |
+| exp_2.pdf | 0.1 | 2026-09-20 | Prospective hybrid pattern-choice/maze learning protocol, written before implementation |
 | exp_1.pdf | 0.2 | 2026-09-19 | Prospective visual-motion protocol plus dated interactive engineering amendment; evaluation remains gated |
 
 Editable content is in this directory's JSON files. From the project root, rebuild with `python docs/research/build_pdfs.py` using ReportLab. Output goes only to `PLAN/plan.pdf` and `PLAN/exp_*.pdf`. These are local prospective documents, not external preregistrations. The project repository is https://github.com/AdityaNarayan001/FruitFly. Statements in the dated PDFs about Git being deferred describe their preparation before initial publication.
@@ -18,3 +19,5 @@ Record revisions here, including whether relevant results had been observed. Kee
 2026-09-19 final handbook verification: 64 pages rendered and visually inspected; clickable contents and references checked. Fresh-checkout setup passed on Mac CPU and Linux ARM64 CPU/CUDA. Both backends passed 13 browser control checks, including delayed Reset acknowledgement. Numerical/API suites passed 19 tests on Mac plus one expected CUDA skip, and all 20 tests on both GX10s. Existing exp_1.pdf preserved.
 
 2026-09-19 initial Git publication: source, current PDFs and editable research sources are included. Downloaded datasets, run records, environments and build outputs remain excluded. The handbook and Experiment 1 PDFs retain their dated pre-publication provenance.
+
+2026-09-20 Experiment 2: an 11-page prospective protocol was generated before implementation or learning outcomes. Rendered and inspected all pages. Original plan.pdf and exp_1.pdf bytes are preserved. Rebuild only the new document with `python docs/research/build_pdfs.py exp_2.json`; the generic builder now supports a document-specific date and an explicit file selection. Development results remain in STATUS.md and run records.
