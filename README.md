@@ -90,6 +90,26 @@ Pattern A and B swap food sites between trials. Correct food gives +1, the other
 
 The prospective protocol is `PLAN/exp_2.pdf`. Records contain source/graph/probe identities, commands, episode outcomes, frozen evaluation trials, source archives and checkpoints. Partial-trial state is excluded from checkpoints.
 
+## Exp 2 comparison: Q table versus a trainable reduced fly circuit
+
+The separate comparison runner preserves the live maze and its checkpoints. Part A audits the existing image-cue and fixed-neural-cue Q learners with paired seeds. Part B compares a Q table, a recorded KC-to-MBON circuit with a learned readout, the same circuit with trainable internal strengths, and a degree-matched randomized circuit. It uses **real MaleCNS anatomy**, not a synthetic substitute.
+
+```sh
+# Prepare the default real dataset without opening a service:
+sh setup_exp_2.sh --no-start
+# Both comparisons; no existing dashboard is stopped:
+OPENBLAS_NUM_THREADS=1 .venv/bin/python -m fruitflybrain.comparison \
+  --graph data/malecns-graph-v1 --backend cpu
+```
+
+On a CUDA host use `--backend cuda` for the original full-graph visual probes. The small trainable rate networks use NumPy on the **host CPU**, including on GX10. `--part legacy` or `--part circuit` runs one independent comparison. `--smoke` is a development check, not the reported research budget. `--runs /path/to/records` chooses the output directory (default `runs/exp_2_comparison`).
+
+The new controller is a **reduced artificial rate model of 256 selected Kenyon cells and their connected MBONs**, with a fixed engineered input projection and an external four-action readout. It does not train or simulate the whole fly brain. The plastic variant updates only existing modeled KC-to-MBON strengths and the readout; absent edges stay zero. The original Exp 2 neural weights remain fixed.
+
+The prospective protocol is the dated v0.2 amendment in `PLAN/exp_2.pdf`, with machine-readable budgets in `configs/exp_2_comparison.json`. All Part B agents share exactly 20,000 collected transitions and 2,000 replay batches of 64. Ten seeds and both reward assignments are evaluated with learning disabled on familiar and unseen mazes separately. Reported intervals resample training seeds, not correlated individual trials.
+
+Each run contains `report.md`, `report.json`, raw trial outcomes, experience arrays, circuit body IDs and masks, learned parameter checkpoints, timing, a source archive and a status manifest. Only a completed non-smoke run supports conclusions. No benefit from biological wiring is established unless it also beats the matched randomized circuit under the stated controls.
+
 ## Neural anatomy explorer: inputs, circuits and outputs
 
 For the **actual annotated brain/CNS**, without starting either experiment:

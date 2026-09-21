@@ -3,9 +3,9 @@
   "title": "Experiment 2: reward-guided pattern choice and maze navigation",
   "subtitle": "Prospective hybrid controller protocol and interactive laboratory specification",
   "code": "EXP 02",
-  "version": "0.1",
-  "date_label": "20 SEP 2026",
-  "footer": "Prospective protocol | Fixed neural encoder + external Q-learning | No biological learning claim",
+  "version": "0.2",
+  "date_label": "21 SEP 2026",
+  "footer": "Exp 2 v0.2 | Original maze + prospective matched comparison | Engineering models",
   "references": {
     "1": [
       "Watkins and Dayan. Q-learning. Machine Learning (1992).",
@@ -22,6 +22,10 @@
     "4": [
       "MaleCNS official download inventory.",
       "https://male-cns.janelia.org/download/"
+    ],
+    "5": [
+      "Learning with reinforcement prediction errors in a model of the Drosophila mushroom body (2021).",
+      "https://www.nature.com/articles/s41467-021-22592-4"
     ]
   },
   "pages": [
@@ -184,6 +188,72 @@
         },
         "The official MaleCNS release supplies anatomical data. The current project supplies assumed dynamics, direct L1 stimulation, calibrated template readout, grid localization, reward values and the external learning mechanism. These layers must remain distinguishable.",
         "Protocol v0.1 is the pre-implementation specification. Implementation checks and observed development results belong in STATUS.md and run records. A later document revision must identify what was observed before it was written. Keep one current exp_2.pdf in PLAN and preserve prior source versions in Git."
+      ]
+    },
+    {
+      "title": "Amendment: a fair comparison",
+      "content": [
+        "21 September 2026. This amendment is written before implementing and observing the new trainable-circuit benchmark. The original 20 September maze runs were already observed: fixed-neural-cue and image-cue Q tables were identical, with 30/30 familiar successes and 8/30 on unseen layouts in one development run. That is evidence of no added value from the cached visual probes in that implementation.",
+        {
+          "h": "Two different questions"
+        },
+        "Part A audits the existing Exp 2 mechanism across ten seeds and both rewarded patterns: does the measured neural encoder change any decoded observation, Q update or outcome compared with direct image cues? Both use identical episode assignments, random decisions, rewards, hyperparameters and training budgets.",
+        "Part B tests whether a reduced network constrained by actual fly connections can learn action values better than a Q table under identical collected experience. It does not train the complete 166,700-neuron LIF model. A separate benchmark preserves the existing UI, sessions and graph files.",
+        {
+          "note": "Q-learning is a learning algorithm; a connectome is a connectivity structure. Our neural controllers also learn action values using temporal-difference learning. The comparison is tabular versus neural representation, and anatomical versus randomized connectivity - not biology versus all reinforcement learning."
+        }
+      ]
+    },
+    {
+      "title": "Exactly what will be trained",
+      "content": [
+        "Load the verified MaleCNS graph and its annotations. Identify Kenyon_Cell and MBON classes. Select 256 connected Kenyon cells using a fixed anatomy-only random seed, retain their recorded positive-weight connections to MBONs, and discard MBON rows without a selected connection. Save every body ID, edge mask and initial weight. No behavioral outcomes influence circuit selection.",
+        "This deliberately reduced feedforward rate model excludes recurrent, modulatory and other brain pathways. Recorded contact counts initialize positive strengths, normalized to unit incoming sum. The imported positive sign is a modeling assumption. It is not the unchanged full-brain spiking simulation and is not validated mushroom-body physiology.",
+        "All agents observe grid x/y, the same two pattern identities and four legal-move bits. No rewarded-pattern label, complete maze, goal label, distance-to-food or shortest path enters the observation. A fixed random projection encodes one-hot x/y and both pattern labels plus legal moves into 256 nonnegative Kenyon-like activities. This projection is engineered, not recorded fly sensory wiring.",
+        "MBON-like activity = tanh(W times KC activity). Four learned linear readouts produce north/east/south/west action values. In the plastic variant, reward-driven TD errors update existing entries of W and the readout; absent edges stay zero and strengths stay nonnegative. In the frozen-circuit variant, only the readout changes.",
+        {
+          "note": "Updating modeled KC-to-MBON strengths is genuine parameter training in this reduced artificial network. It is not proof of biological synaptic plasticity. Backpropagation/Adam and the external action readout are engineered learning mechanisms. [5]"
+        }
+      ]
+    },
+    {
+      "title": "Controls and equal experience",
+      "content": [
+        "Controllers in Part B: (1) tabular Q-learning, (2) recorded circuit with a trainable readout and frozen internal weights, (3) recorded circuit with trainable internal weights and readout, (4) randomized circuit with the same training mechanism and number of parameters. A random-action policy is an evaluation reference.",
+        "The randomized control uses directed bipartite edge swaps preserving incoming and outgoing degrees. It retains the same selected cells, input projection, readout initialization, positive weight multiset per output cell and edge count. The source and randomized masks and their difference are recorded. This isolates topology more closely than an unmatched dense ANN.",
+        "For each of ten seeds and both rewarded patterns, collect exactly 20,000 environment transitions using uniform random legal actions on the default maze. Reset at terminal outcomes or the 120-step limit. This shared behavior dataset prevents one controller from receiving a more favorable learning history.",
+        "Each controller receives the same 2,000 replay batches of 64 transitions. Tabular Q uses alpha 0.25 and gamma 0.95. Neural Q uses Huber TD loss, Adam learning rate 0.001, gamma 0.95, a frozen target copy refreshed every 100 updates, gradient norm clipping at 5, and nonnegative internal weights clipped to 3. No test-result tuning is allowed within this protocol.",
+        "All neural controllers share the input projection and initial readout for a given seed. No pretraining or privileged labels are used. The full graph is immutable; learned reduced-circuit weights go into separate checkpoints. Equal experience and update counts do not imply equal wall time or parameter count; both are reported."
+      ]
+    },
+    {
+      "title": "Evaluation and decision rules",
+      "content": [
+        "Part A: ten training seeds, rewarded A and B, 400 training episodes per condition, 100 frozen trials on the familiar maze and 100 on unseen layouts. Compare decoded tokens and exact Q-table hashes, and save matched outcomes. The current encoder resets for each of its two 40 ms probes, and does not evolve during movement.",
+        "Part B: evaluate before training and after 500, 1,000 and 2,000 updates. At each checkpoint run 100 trials on the familiar maze and 100 on unseen layouts, using a separate RNG seed namespace. Pair assignments, mazes and action-tie seeds across agents. Reusing frozen test conditions supports learning curves, not hyperparameter selection.",
+        "Exploration and learning are off during evaluation. Preserve policy hashes before/after, and fail if they change. Use 50 fixed unseen layouts with both pattern assignments. Exact x/y and adjacent walls remain observable, so this tests limited layout transfer rather than natural fly navigation or full-map planning.",
+        "Primary endpoint: familiar-maze success after the fixed budget. Report unseen-layout success separately, along with mean return, steps, successful-route efficiency, training time and trainable parameter counts. Compute paired differences averaged over both rewarded patterns within each training seed, with a bootstrap 95% interval over the ten seed units.",
+        "Call a controller better only on the named metric and tested setting; an interval overlapping zero is inconclusive. An anatomical benefit requires improvement over the matched randomized circuit as well as relevant tabular results. A failed neural learner, a tie or poor transfer must remain visible. This small benchmark cannot establish superiority over all ML/RL models."
+      ]
+    },
+    {
+      "title": "Reproduction and scope updates",
+      "content": [
+        "The comparison runner will save a prospective config, source manifest/archive, verified graph identity, selected circuit IDs/masks/weights, raw shared transition data, replay seeds, checkpoints, learning curves, trial outcomes, timing and a machine-readable report. Records remain separate from the live maze experiment.",
+        "Full-graph visual probes run with the requested existing CPU/CUDA backend. The small reduced-circuit benchmark uses NumPy on the GX10 host CPU; it does not silently claim GPU training. Dependency pins and source archives identify the implementation. Development smoke runs are excluded from the reported benchmark.",
+        "The protocol and its fingerprint are saved before collecting new outcomes. Any deviations or later changes to training budgets must be dated and reported, not retroactively described as prospective. Original Exp 1 dynamics and the current interactive Exp 2 learning rule are preserved.",
+        "Current setup defaults have changed since the original pages were written: setup.sh, setup_exp_2.sh and setup_explorer.sh now select real MaleCNS data. Synthetic software fixtures require --dataset demo explicitly. This setup correction does not change the original experimental results.",
+        {
+          "refs": [
+            1,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "note": "No comparative result from the new plastic network exists at the time of this amendment. Observed outcomes will be added to STATUS.md and the separate run report after verification."
+        }
       ]
     }
   ]

@@ -1,0 +1,46 @@
+{
+  "protocol": "Exp 2 v0.2 amendment, 21 September 2026",
+  "status_at_definition": "Prospective; original Exp 2 outcomes already known",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "rewarded_patterns": [
+    "A",
+    "B"
+  ],
+  "legacy_training_episodes": 400,
+  "evaluation_episodes": 100,
+  "transitions": 20000,
+  "checkpoints": [
+    0,
+    500,
+    1000,
+    2000
+  ],
+  "batch_size": 64,
+  "kc_count": 256,
+  "circuit_seed": 20260921,
+  "gamma": 0.95,
+  "tabular_alpha": 0.25,
+  "neural_learning_rate": 0.001,
+  "target_refresh_updates": 100,
+  "gradient_norm_limit": 5,
+  "positive_weight_limit": 3,
+  "observation": "x, y, two opposite pattern identities, four legal-move bits; no reward identity, full maze or path oracle",
+  "neural_model": "Reduced KC-to-MBON feedforward rate model with engineered fixed projection and learned linear action readout; not full-brain LIF dynamics",
+  "benchmark_compute": "NumPy CPU on GX10 host; legacy full-graph probes use requested backend",
+  "evaluation": "Frozen greedy policies; familiar and unseen reported separately; paired across controllers",
+  "interval": "95% paired bootstrap over seed means, averaging rewarded A/B within seed; 10000 resamples",
+  "primary_endpoint": "Familiar success after 2000 updates; unseen transfer is a separate endpoint",
+  "interpretation": "Exploratory bounded comparison, not superiority over all RL/ML or biological validation",
+  "prospective_pdf_sha256": "28753609a1032090be1b2eec57077b86163d6bbc220924f6c9d43e0fd893b8dd"
+}
