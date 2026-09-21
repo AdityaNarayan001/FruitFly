@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import pyarrow.feather as feather
 from ..graph import Graph
-from ..provenance import canonical_hash
+from ..provenance import canonical_hash,sha256
 
 
 def rewire(mask, weights, seed=9173):
@@ -27,6 +27,9 @@ def rewire(mask, weights, seed=9173):
 def extract(path,count=256,seed=20260921):
     path=Path(path);g=Graph.load(path)
     if g.metadata.get('dataset')!='male-cns:v1.0':raise ValueError('This anatomical comparison requires real MaleCNS; synthetic fallback is forbidden')
+    for name in ('neurons.feather','anatomical_contacts.npy'):
+        expected=g.metadata.get('supplemental_files',{}).get(name)
+        if not expected or sha256(path/name)!=expected:raise ValueError('Missing or mismatched anatomical file: '+name)
     t=feather.read_table(path/'neurons.feather',columns=['bodyId','class']).to_pydict()
     labels={int(i):c for i,c in zip(t['bodyId'],t['class'])}
     kc={i for i,b in enumerate(g.ids) if labels.get(int(b))=='Kenyon_Cell'}

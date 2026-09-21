@@ -44,6 +44,12 @@ class Table:
             self.q[s,a]+=.25*(target-self.q[s,a])
     def state_hash(self):return fingerprint(self.q)
     def save(self,path):np.savez_compressed(path,q=self.q)
+    @classmethod
+    def load(cls,path):
+        result=cls()
+        with np.load(path,allow_pickle=False) as z:result.q[:]=z['q']
+        if not np.isfinite(result.q).all():raise ValueError('Nonfinite checkpoint')
+        return result
     @property
     def parameters(self):return self.q.size
 
@@ -94,6 +100,23 @@ class Network:
     def save(self,path):
         np.savez_compressed(path,w=self.w,initial_w=self.initial_w,mask=self.mask,projection=self.projection,
             readout=self.readout,bias=self.bias,target_w=self.target_w,target_readout=self.target_readout,target_bias=self.target_bias,
-            m_w=self.m[0],m_readout=self.m[1],m_bias=self.m[2],v_w=self.v[0],v_readout=self.v[1],v_bias=self.v[2],updates=self.updates)
+            m_w=self.m[0],m_readout=self.m[1],m_bias=self.m[2],v_w=self.v[0],v_readout=self.v[1],v_bias=self.v[2],updates=self.updates,plastic=self.plastic)
+    @classmethod
+    def load(cls,path,plastic=None):
+        with np.load(path,allow_pickle=False) as z:
+            if plastic is None:
+                if 'plastic' not in z:raise ValueError('Initial checkpoint format requires explicit plastic=True/False')
+                plastic=bool(z['plastic'])
+            result=cls(z['initial_w'],0,plastic)
+            for key in ('w','mask','projection','readout','bias','target_w','target_readout','target_bias'):
+                value=z[key]
+                if value.shape!=getattr(result,key).shape or not np.isfinite(value).all():raise ValueError('Invalid checkpoint array '+key)
+                setattr(result,key,value.copy())
+            if not np.array_equal(result.mask,result.initial_w>0) or (result.w[~result.mask]!=0).any() or (result.w<0).any():raise ValueError('Invalid learned mask or strengths')
+            result.m=[z['m_'+k].copy() for k in ('w','readout','bias')]
+            result.v=[z['v_'+k].copy() for k in ('w','readout','bias')];result.updates=int(z['updates'])
+        inputs=all_observations()
+        result.kc=np.maximum(np.dot(inputs,result.projection)/np.sqrt(np.maximum(inputs.sum(1,keepdims=True),1))-1.,0.)
+        return result
     @property
     def parameters(self):return int(self.mask.sum())*int(self.plastic)+self.readout.size+self.bias.size

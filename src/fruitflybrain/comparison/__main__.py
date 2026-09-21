@@ -194,6 +194,9 @@ def main():
     parser.add_argument('--backend',choices=['cpu','cuda'],default='cpu',help='Full-graph probe backend; reduced network always uses host CPU')
     parser.add_argument('--part',choices=['all','legacy','circuit'],default='all');parser.add_argument('--smoke',action='store_true')
     args=parser.parse_args();p=json.loads((ROOT/'configs/exp_2_comparison.json').read_text())
+    implemented={'gamma':.95,'tabular_alpha':.25,'neural_learning_rate':.001,'target_refresh_updates':100,'gradient_norm_limit':5,'positive_weight_limit':3}
+    if any(p.get(k)!=v for k,v in implemented.items()):
+        raise ValueError('Protocol hyperparameters differ from this implementation; update and verify the models before running')
     if args.smoke:p.update(seeds=[0],rewarded_patterns=['A'],legacy_training_episodes=4,evaluation_episodes=4,transitions=200,checkpoints=[0,2],development_smoke=True)
     args.runs.mkdir(parents=True,exist_ok=True);run=args.runs/(datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'-comparison-'+uuid.uuid4().hex[:6]);run.mkdir()
     source=source_manifest();snapshot=preserve_source(args.runs,source)
@@ -206,7 +209,8 @@ def main():
         if args.part in ('all','legacy'):results['legacy']=legacy(run,args.graph,args.backend,p)
         if args.part in ('all','circuit'):results['circuit']=circuit(run,args.graph,p)
         report=aggregate(results,p);atomic_json(run/'report.json',report);(run/'report.md').write_text(markdown(report))
-        manifest.update(status='complete',outputs={str(f.relative_to(run)):sha256(f) for f in run.rglob('*') if f.is_file() and f.name!='manifest.json'})
+        # Progress is a mutable status pointer, updated after completion is committed.
+        manifest.update(status='complete',outputs={str(f.relative_to(run)):sha256(f) for f in run.rglob('*') if f.is_file() and f.name not in ('manifest.json','progress.json')})
         atomic_json(run/'manifest.json',manifest);emit(run,'complete',report=str(run/'report.md'))
     except BaseException as e:
         manifest.update(status='failed',error=f'{type(e).__name__}: {e}');atomic_json(run/'manifest.json',manifest);raise

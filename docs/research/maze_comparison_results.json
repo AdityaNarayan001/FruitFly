@@ -1,0 +1,792 @@
+{
+  "circuit": [
+    {
+      "agent": "fly_fixed_readout",
+      "mean_return": -1.1267500000000013,
+      "mean_steps": 114.6,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.0,
+      "parameters": 392,
+      "split": "familiar",
+      "success_rate": 0.025,
+      "successes": 50,
+      "trials": 2000,
+      "updates": 0
+    },
+    {
+      "agent": "fly_plastic",
+      "mean_return": -1.1267500000000013,
+      "mean_steps": 114.6,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.0,
+      "parameters": 4249,
+      "split": "familiar",
+      "success_rate": 0.025,
+      "successes": 50,
+      "trials": 2000,
+      "updates": 0
+    },
+    {
+      "agent": "q_table",
+      "mean_return": -0.6135500000000007,
+      "mean_steps": 85.45600000000002,
+      "mean_success_efficiency": 0.2160739635632051,
+      "mean_training_seconds": 0.0,
+      "parameters": 10368,
+      "split": "familiar",
+      "success_rate": 0.31300000000000006,
+      "successes": 626,
+      "trials": 2000,
+      "updates": 0
+    },
+    {
+      "agent": "random",
+      "mean_return": -0.6135500000000007,
+      "mean_steps": 85.45600000000002,
+      "mean_success_efficiency": 0.2160739635632051,
+      "mean_training_seconds": 0.0,
+      "parameters": 0,
+      "split": "familiar",
+      "success_rate": 0.31300000000000006,
+      "successes": 626,
+      "trials": 2000,
+      "updates": 0
+    },
+    {
+      "agent": "rewired_plastic",
+      "mean_return": -1.2000000000000015,
+      "mean_steps": 120.0,
+      "mean_success_efficiency": null,
+      "mean_training_seconds": 0.0,
+      "parameters": 4249,
+      "split": "familiar",
+      "success_rate": 0.0,
+      "successes": 0,
+      "trials": 2000,
+      "updates": 0
+    },
+    {
+      "agent": "fly_fixed_readout",
+      "mean_return": -1.1477500000000014,
+      "mean_steps": 117.3,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.1473332563880831,
+      "parameters": 392,
+      "split": "familiar",
+      "success_rate": 0.025,
+      "successes": 50,
+      "trials": 2000,
+      "updates": 500
+    },
+    {
+      "agent": "fly_plastic",
+      "mean_return": -0.9905000000000012,
+      "mean_steps": 109.15,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.1755847433116287,
+      "parameters": 4249,
+      "split": "familiar",
+      "success_rate": 0.1,
+      "successes": 200,
+      "trials": 2000,
+      "updates": 500
+    },
+    {
+      "agent": "q_table",
+      "mean_return": 0.6377499999999999,
+      "mean_steps": 24.6,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.05204163051676005,
+      "parameters": 10368,
+      "split": "familiar",
+      "success_rate": 0.875,
+      "successes": 1750,
+      "trials": 2000,
+      "updates": 500
+    },
+    {
+      "agent": "random",
+      "mean_return": -0.6135500000000007,
+      "mean_steps": 85.45600000000002,
+      "mean_success_efficiency": 0.2160739635632051,
+      "mean_training_seconds": 0.0,
+      "parameters": 0,
+      "split": "familiar",
+      "success_rate": 0.31300000000000006,
+      "successes": 626,
+      "trials": 2000,
+      "updates": 500
+    },
+    {
+      "agent": "rewired_plastic",
+      "mean_return": -0.8122500000000009,
+      "mean_steps": 98.3,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.17688964437693358,
+      "parameters": 4249,
+      "split": "familiar",
+      "success_rate": 0.175,
+      "successes": 350,
+      "trials": 2000,
+      "updates": 500
+    },
+    {
+      "agent": "fly_fixed_readout",
+      "mean_return": -0.9372500000000009,
+      "mean_steps": 106.35,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.29468386808875946,
+      "parameters": 392,
+      "split": "familiar",
+      "success_rate": 0.125,
+      "successes": 250,
+      "trials": 2000,
+      "updates": 1000
+    },
+    {
+      "agent": "fly_plastic",
+      "mean_return": 0.21874999999999972,
+      "mean_steps": 46.3,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.35113032984081655,
+      "parameters": 4249,
+      "split": "familiar",
+      "success_rate": 0.675,
+      "successes": 1350,
+      "trials": 2000,
+      "updates": 1000
+    },
+    {
+      "agent": "q_table",
+      "mean_return": 0.74275,
+      "mean_steps": 19.15,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.10407326533459127,
+      "parameters": 10368,
+      "split": "familiar",
+      "success_rate": 0.925,
+      "successes": 1850,
+      "trials": 2000,
+      "updates": 1000
+    },
+    {
+      "agent": "random",
+      "mean_return": -0.6135500000000007,
+      "mean_steps": 85.45600000000002,
+      "mean_success_efficiency": 0.2160739635632051,
+      "mean_training_seconds": 0.0,
+      "parameters": 0,
+      "split": "familiar",
+      "success_rate": 0.31300000000000006,
+      "successes": 626,
+      "trials": 2000,
+      "updates": 1000
+    },
+    {
+      "agent": "rewired_plastic",
+      "mean_return": 0.3237499999999998,
+      "mean_steps": 40.85,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.35380974640138446,
+      "parameters": 4249,
+      "split": "familiar",
+      "success_rate": 0.725,
+      "successes": 1450,
+      "trials": 2000,
+      "updates": 1000
+    },
+    {
+      "agent": "fly_fixed_readout",
+      "mean_return": -0.3692500000000005,
+      "mean_steps": 73.6,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.5892191946273669,
+      "parameters": 392,
+      "split": "familiar",
+      "success_rate": 0.375,
+      "successes": 750,
+      "trials": 2000,
+      "updates": 2000
+    },
+    {
+      "agent": "fly_plastic",
+      "mean_return": 0.63875,
+      "mean_steps": 24.5,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.7020795041229576,
+      "parameters": 4249,
+      "split": "familiar",
+      "success_rate": 0.875,
+      "successes": 1750,
+      "trials": 2000,
+      "updates": 2000
+    },
+    {
+      "agent": "q_table",
+      "mean_return": 0.585,
+      "mean_steps": 27.35,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.20853963370900602,
+      "parameters": 10368,
+      "split": "familiar",
+      "success_rate": 0.85,
+      "successes": 1700,
+      "trials": 2000,
+      "updates": 2000
+    },
+    {
+      "agent": "random",
+      "mean_return": -0.6135500000000007,
+      "mean_steps": 85.45600000000002,
+      "mean_success_efficiency": 0.2160739635632051,
+      "mean_training_seconds": 0.0,
+      "parameters": 0,
+      "split": "familiar",
+      "success_rate": 0.31300000000000006,
+      "successes": 626,
+      "trials": 2000,
+      "updates": 2000
+    },
+    {
+      "agent": "rewired_plastic",
+      "mean_return": 0.7955,
+      "mean_steps": 16.4,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.7075276412069798,
+      "parameters": 4249,
+      "split": "familiar",
+      "success_rate": 0.95,
+      "successes": 1900,
+      "trials": 2000,
+      "updates": 2000
+    },
+    {
+      "agent": "fly_fixed_readout",
+      "mean_return": -1.019920000000001,
+      "mean_steps": 106.612,
+      "mean_success_efficiency": 0.9365079365079365,
+      "mean_training_seconds": 0.0,
+      "parameters": 392,
+      "split": "unseen",
+      "success_rate": 0.06000000000000001,
+      "successes": 120,
+      "trials": 2000,
+      "updates": 0
+    },
+    {
+      "agent": "fly_plastic",
+      "mean_return": -1.019920000000001,
+      "mean_steps": 106.612,
+      "mean_success_efficiency": 0.9365079365079365,
+      "mean_training_seconds": 0.0,
+      "parameters": 4249,
+      "split": "unseen",
+      "success_rate": 0.06000000000000001,
+      "successes": 120,
+      "trials": 2000,
+      "updates": 0
+    },
+    {
+      "agent": "q_table",
+      "mean_return": -0.6349750000000005,
+      "mean_steps": 85.86600000000001,
+      "mean_success_efficiency": 0.22184416471994908,
+      "mean_training_seconds": 0.0,
+      "parameters": 10368,
+      "split": "unseen",
+      "success_rate": 0.2905,
+      "successes": 581,
+      "trials": 2000,
+      "updates": 0
+    },
+    {
+      "agent": "random",
+      "mean_return": -0.6349750000000005,
+      "mean_steps": 85.86600000000001,
+      "mean_success_efficiency": 0.22184416471994908,
+      "mean_training_seconds": 0.0,
+      "parameters": 0,
+      "split": "unseen",
+      "success_rate": 0.2905,
+      "successes": 581,
+      "trials": 2000,
+      "updates": 0
+    },
+    {
+      "agent": "rewired_plastic",
+      "mean_return": -0.944700000000001,
+      "mean_steps": 100.93800000000002,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.0,
+      "parameters": 4249,
+      "split": "unseen",
+      "success_rate": 0.084,
+      "successes": 168,
+      "trials": 2000,
+      "updates": 0
+    },
+    {
+      "agent": "fly_fixed_readout",
+      "mean_return": -0.8136000000000007,
+      "mean_steps": 94.162,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.1473332563880831,
+      "parameters": 392,
+      "split": "unseen",
+      "success_rate": 0.146,
+      "successes": 292,
+      "trials": 2000,
+      "updates": 500
+    },
+    {
+      "agent": "fly_plastic",
+      "mean_return": -1.0154150000000008,
+      "mean_steps": 110.27799999999999,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.1755847433116287,
+      "parameters": 4249,
+      "split": "unseen",
+      "success_rate": 0.08650000000000001,
+      "successes": 173,
+      "trials": 2000,
+      "updates": 500
+    },
+    {
+      "agent": "q_table",
+      "mean_return": -0.27388000000000046,
+      "mean_steps": 75.767,
+      "mean_success_efficiency": 0.5244326024693594,
+      "mean_training_seconds": 0.05204163051676005,
+      "parameters": 10368,
+      "split": "unseen",
+      "success_rate": 0.4790000000000001,
+      "successes": 958,
+      "trials": 2000,
+      "updates": 500
+    },
+    {
+      "agent": "random",
+      "mean_return": -0.6349750000000005,
+      "mean_steps": 85.86600000000001,
+      "mean_success_efficiency": 0.22184416471994908,
+      "mean_training_seconds": 0.0,
+      "parameters": 0,
+      "split": "unseen",
+      "success_rate": 0.2905,
+      "successes": 581,
+      "trials": 2000,
+      "updates": 500
+    },
+    {
+      "agent": "rewired_plastic",
+      "mean_return": -0.9271150000000009,
+      "mean_steps": 105.69000000000001,
+      "mean_success_efficiency": 0.9984761904761904,
+      "mean_training_seconds": 0.17688964437693358,
+      "parameters": 4249,
+      "split": "unseen",
+      "success_rate": 0.1285,
+      "successes": 257,
+      "trials": 2000,
+      "updates": 500
+    },
+    {
+      "agent": "fly_fixed_readout",
+      "mean_return": -0.8349150000000007,
+      "mean_steps": 96.747,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.29468386808875946,
+      "parameters": 392,
+      "split": "unseen",
+      "success_rate": 0.14550000000000002,
+      "successes": 291,
+      "trials": 2000,
+      "updates": 1000
+    },
+    {
+      "agent": "fly_plastic",
+      "mean_return": -0.6521650000000008,
+      "mean_steps": 91.426,
+      "mean_success_efficiency": 0.9884847922725584,
+      "mean_training_seconds": 0.35113032984081655,
+      "parameters": 4249,
+      "split": "unseen",
+      "success_rate": 0.2595,
+      "successes": 519,
+      "trials": 2000,
+      "updates": 1000
+    },
+    {
+      "agent": "q_table",
+      "mean_return": -0.18165000000000048,
+      "mean_steps": 71.49299999999998,
+      "mean_success_efficiency": 0.51762459425362,
+      "mean_training_seconds": 0.10407326533459127,
+      "parameters": 10368,
+      "split": "unseen",
+      "success_rate": 0.528,
+      "successes": 1056,
+      "trials": 2000,
+      "updates": 1000
+    },
+    {
+      "agent": "random",
+      "mean_return": -0.6349750000000005,
+      "mean_steps": 85.86600000000001,
+      "mean_success_efficiency": 0.22184416471994908,
+      "mean_training_seconds": 0.0,
+      "parameters": 0,
+      "split": "unseen",
+      "success_rate": 0.2905,
+      "successes": 581,
+      "trials": 2000,
+      "updates": 1000
+    },
+    {
+      "agent": "rewired_plastic",
+      "mean_return": -0.6236300000000007,
+      "mean_steps": 89.775,
+      "mean_success_efficiency": 0.9915727422003284,
+      "mean_training_seconds": 0.35380974640138446,
+      "parameters": 4249,
+      "split": "unseen",
+      "success_rate": 0.272,
+      "successes": 544,
+      "trials": 2000,
+      "updates": 1000
+    },
+    {
+      "agent": "fly_fixed_readout",
+      "mean_return": -0.7234900000000007,
+      "mean_steps": 90.561,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": 0.5892191946273669,
+      "parameters": 392,
+      "split": "unseen",
+      "success_rate": 0.196,
+      "successes": 392,
+      "trials": 2000,
+      "updates": 2000
+    },
+    {
+      "agent": "fly_plastic",
+      "mean_return": -0.6733200000000007,
+      "mean_steps": 92.481,
+      "mean_success_efficiency": 0.9974310776942356,
+      "mean_training_seconds": 0.7020795041229576,
+      "parameters": 4249,
+      "split": "unseen",
+      "success_rate": 0.24900000000000003,
+      "successes": 498,
+      "trials": 2000,
+      "updates": 2000
+    },
+    {
+      "agent": "q_table",
+      "mean_return": -0.19254000000000046,
+      "mean_steps": 72.07700000000001,
+      "mean_success_efficiency": 0.5083220191559416,
+      "mean_training_seconds": 0.20853963370900602,
+      "parameters": 10368,
+      "split": "unseen",
+      "success_rate": 0.523,
+      "successes": 1046,
+      "trials": 2000,
+      "updates": 2000
+    },
+    {
+      "agent": "random",
+      "mean_return": -0.6349750000000005,
+      "mean_steps": 85.86600000000001,
+      "mean_success_efficiency": 0.22184416471994908,
+      "mean_training_seconds": 0.0,
+      "parameters": 0,
+      "split": "unseen",
+      "success_rate": 0.2905,
+      "successes": 581,
+      "trials": 2000,
+      "updates": 2000
+    },
+    {
+      "agent": "rewired_plastic",
+      "mean_return": -0.6318500000000007,
+      "mean_steps": 90.354,
+      "mean_success_efficiency": 0.9983860373960486,
+      "mean_training_seconds": 0.7075276412069798,
+      "parameters": 4249,
+      "split": "unseen",
+      "success_rate": 0.269,
+      "successes": 538,
+      "trials": 2000,
+      "updates": 2000
+    }
+  ],
+  "circuit_anatomy": {
+    "edges": 3857,
+    "graph_sha256": "f2aa11508c3665389e7d511b2d68ebd5283fe763c60caecb022a85a09726f6e9",
+    "n_kc": 256,
+    "n_mbon": 97,
+    "rewiring": {
+      "accepted_swaps": 63715,
+      "different_mask_entries": 5696
+    },
+    "sha256": "cad1614ebd7647da45ce885054e3b914d82053a5355a77b2a1b0c2e602a851c4"
+  },
+  "interpretation": {
+    "anatomy": "No demonstrated advantage over the degree-matched rewired network.",
+    "familiar": "Plastic circuit versus replay Q table is inconclusive across seeds.",
+    "legacy": "Exact tie: the calibrated probes deliver the same tokens to identical tabular learners.",
+    "limits": [
+      "Reduced feedforward rate model, not the full fly brain or natural plasticity.",
+      "One selected circuit and one rewiring; confidence intervals concern training seeds only.",
+      "Fixed hyperparameters and update budget; no claim about optimally tuned algorithms.",
+      "Parts A and B use different training regimes and state representations; compare agents within each part.",
+      "Time-limit truncations are terminal in the existing maze; time remaining is not observed.",
+      "Timing is cumulative update-call time, excluding data collection, initialization and evaluation."
+    ],
+    "unseen": "Replay Q table outperformed this plastic circuit on the held-out maze set."
+  },
+  "legacy": [
+    {
+      "agent": "fly_probe_q",
+      "mean_return": 0.8999999999999998,
+      "mean_steps": 11.0,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": null,
+      "parameters": null,
+      "split": "familiar",
+      "success_rate": 1.0,
+      "successes": 2000,
+      "trials": 2000,
+      "updates": null
+    },
+    {
+      "agent": "q_table",
+      "mean_return": 0.8999999999999998,
+      "mean_steps": 11.0,
+      "mean_success_efficiency": 1.0,
+      "mean_training_seconds": null,
+      "parameters": null,
+      "split": "familiar",
+      "success_rate": 1.0,
+      "successes": 2000,
+      "trials": 2000,
+      "updates": null
+    },
+    {
+      "agent": "random",
+      "mean_return": -0.6135500000000007,
+      "mean_steps": 85.45600000000002,
+      "mean_success_efficiency": 0.2160739635632051,
+      "mean_training_seconds": null,
+      "parameters": null,
+      "split": "familiar",
+      "success_rate": 0.31300000000000006,
+      "successes": 626,
+      "trials": 2000,
+      "updates": null
+    },
+    {
+      "agent": "fly_probe_q",
+      "mean_return": -0.6032100000000008,
+      "mean_steps": 89.106,
+      "mean_success_efficiency": 0.9585441259528963,
+      "mean_training_seconds": null,
+      "parameters": null,
+      "split": "unseen",
+      "success_rate": 0.285,
+      "successes": 570,
+      "trials": 2000,
+      "updates": null
+    },
+    {
+      "agent": "q_table",
+      "mean_return": -0.6032100000000008,
+      "mean_steps": 89.106,
+      "mean_success_efficiency": 0.9585441259528963,
+      "mean_training_seconds": null,
+      "parameters": null,
+      "split": "unseen",
+      "success_rate": 0.285,
+      "successes": 570,
+      "trials": 2000,
+      "updates": null
+    },
+    {
+      "agent": "random",
+      "mean_return": -0.6349750000000005,
+      "mean_steps": 85.86600000000001,
+      "mean_success_efficiency": 0.22184416471994908,
+      "mean_training_seconds": null,
+      "parameters": null,
+      "split": "unseen",
+      "success_rate": 0.2905,
+      "successes": 581,
+      "trials": 2000,
+      "updates": null
+    }
+  ],
+  "paired_differences": [
+    {
+      "a": "fly_probe_q",
+      "b": "q_table",
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "mean": 0.0,
+      "part": "legacy",
+      "seed_units": 10,
+      "split": "familiar"
+    },
+    {
+      "a": "fly_probe_q",
+      "b": "q_table",
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "mean": 0.0,
+      "part": "legacy",
+      "seed_units": 10,
+      "split": "unseen"
+    },
+    {
+      "a": "fly_plastic",
+      "b": "q_table",
+      "ci95": [
+        -0.125,
+        0.175
+      ],
+      "mean": 0.025,
+      "part": "circuit",
+      "seed_units": 10,
+      "split": "familiar"
+    },
+    {
+      "a": "fly_plastic",
+      "b": "rewired_plastic",
+      "ci95": [
+        -0.15,
+        0.0
+      ],
+      "mean": -0.075,
+      "part": "circuit",
+      "seed_units": 10,
+      "split": "familiar"
+    },
+    {
+      "a": "fly_plastic",
+      "b": "fly_fixed_readout",
+      "ci95": [
+        0.225,
+        0.75
+      ],
+      "mean": 0.5,
+      "part": "circuit",
+      "seed_units": 10,
+      "split": "familiar"
+    },
+    {
+      "a": "fly_plastic",
+      "b": "q_table",
+      "ci95": [
+        -0.357,
+        -0.18049999999999997
+      ],
+      "mean": -0.2739999999999999,
+      "part": "circuit",
+      "seed_units": 10,
+      "split": "unseen"
+    },
+    {
+      "a": "fly_plastic",
+      "b": "rewired_plastic",
+      "ci95": [
+        -0.07501250000000001,
+        0.03600000000000004
+      ],
+      "mean": -0.019999999999999987,
+      "part": "circuit",
+      "seed_units": 10,
+      "split": "unseen"
+    },
+    {
+      "a": "fly_plastic",
+      "b": "fly_fixed_readout",
+      "ci95": [
+        -0.03199999999999997,
+        0.14600000000000002
+      ],
+      "mean": 0.053000000000000026,
+      "part": "circuit",
+      "seed_units": 10,
+      "split": "unseen"
+    }
+  ],
+  "plasticity_checks": {
+    "all_frozen_verified": true,
+    "conditions": 20,
+    "max_edges_changed": 3283,
+    "min_edges_changed": 3013
+  },
+  "protocol": {
+    "batch_size": 64,
+    "benchmark_compute": "NumPy CPU on GX10 host; legacy full-graph probes use requested backend",
+    "checkpoints": [
+      0,
+      500,
+      1000,
+      2000
+    ],
+    "circuit_seed": 20260921,
+    "evaluation": "Frozen greedy policies; familiar and unseen reported separately; paired across controllers",
+    "evaluation_episodes": 100,
+    "gamma": 0.95,
+    "gradient_norm_limit": 5,
+    "interpretation": "Exploratory bounded comparison, not superiority over all RL/ML or biological validation",
+    "interval": "95% paired bootstrap over seed means, averaging rewarded A/B within seed; 10000 resamples",
+    "kc_count": 256,
+    "legacy_training_episodes": 400,
+    "neural_learning_rate": 0.001,
+    "neural_model": "Reduced KC-to-MBON feedforward rate model with engineered fixed projection and learned linear action readout; not full-brain LIF dynamics",
+    "observation": "x, y, two opposite pattern identities, four legal-move bits; no reward identity, full maze or path oracle",
+    "positive_weight_limit": 3,
+    "primary_endpoint": "Familiar success after 2000 updates; unseen transfer is a separate endpoint",
+    "prospective_pdf_sha256": "28753609a1032090be1b2eec57077b86163d6bbc220924f6c9d43e0fd893b8dd",
+    "protocol": "Exp 2 v0.2 amendment, 21 September 2026",
+    "rewarded_patterns": [
+      "A",
+      "B"
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "status_at_definition": "Prospective; original Exp 2 outcomes already known",
+    "tabular_alpha": 0.25,
+    "target_refresh_updates": 100,
+    "transitions": 20000
+  },
+  "provenance": {
+    "progress_checksum_repair": "Original mutable progress pointer was mistakenly included in immutable output hashes. Explicit audit records preserve original manifests; scientific artifacts verified unchanged.",
+    "run_ids": [
+      "20260921T060909Z-comparison-b15807",
+      "20260921T060903Z-comparison-a72cae"
+    ],
+    "run_manifest_sha256": [
+      "09e8d6a2d95c74f94dcaf3953115620141f2227058ceb4540aaa4fdd8771c80e",
+      "73d09d7e1098391fd569b267616b0ea4c23b0f0d4a9922929df7986ae74e5114"
+    ],
+    "source_sha256": "f80cf6c780fc2783550d622e8fb15e8d8d626bfefdccce5024dccfec3f960f9e"
+  },
+  "scope": "Engineering comparison; new plastic controller is reduced rate model, not full fly brain"
+}

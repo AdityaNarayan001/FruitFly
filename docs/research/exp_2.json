@@ -3,9 +3,9 @@
   "title": "Experiment 2: reward-guided pattern choice and maze navigation",
   "subtitle": "Prospective hybrid controller protocol and interactive laboratory specification",
   "code": "EXP 02",
-  "version": "0.2",
+  "version": "0.3",
   "date_label": "21 SEP 2026",
-  "footer": "Exp 2 v0.2 | Original maze + prospective matched comparison | Engineering models",
+  "footer": "Exp 2 v0.3 | Prospective protocol + dated observed results | No biological-learning claim",
   "references": {
     "1": [
       "Watkins and Dayan. Q-learning. Machine Learning (1992).",
@@ -253,6 +253,89 @@
         },
         {
           "note": "No comparative result from the new plastic network exists at the time of this amendment. Observed outcomes will be added to STATUS.md and the separate run report after verification."
+        }
+      ]
+    },
+    {
+      "title": "Observed results: 21 September",
+      "content": [
+        "Written after the two full runs completed on 21 September 2026. This section reports observations; the preceding v0.2 amendment was authored before the new benchmark was implemented and run. No test-driven parameter tuning was performed.",
+        {
+          "h": "Part A: the existing maze controller"
+        },
+        "Across ten seeds, both reward assignments and 400 online training episodes, fly-probe Q and direct-image Q produced exactly equal Q tables after every episode. Both achieved 2,000/2,000 familiar successes (100%) and 570/2,000 unseen successes (28.5%). Their difference was exactly zero. The neural probe supplies the same decoded tokens and adds no demonstrated value here.",
+        {
+          "h": "Part B: equal recorded experience"
+        },
+        "Final success percentages after 2,000 replay updates. Each bar represents 2,000 frozen trials across ten training seeds and both reward assignments. These are point estimates; paired uncertainty is reported on the next page.",
+        {
+          "bar_chart": {
+            "series": [
+              [
+                85.0,
+                37.5,
+                87.5,
+                95.0
+              ],
+              [
+                52.3,
+                19.6,
+                24.9,
+                26.9
+              ]
+            ],
+            "categories": [
+              "Q table",
+              "Frozen circuit",
+              "Plastic circuit",
+              "Rewired circuit"
+            ],
+            "labels": [
+              "Familiar maze success (%)",
+              "Unseen maze success (%)"
+            ]
+          }
+        },
+        {
+          "note": "Part B uses shared random experience and a wall-aware state representation. Part A uses online training and the original state representation. Compare agents within each part; the different Q-table scores are not a contradiction."
+        }
+      ]
+    },
+    {
+      "title": "What did training establish?",
+      "content": [
+        {
+          "h": "Connection strengths really changed"
+        },
+        "The selected anatomical circuit contains 256 Kenyon cells, 97 MBONs and 3,857 recorded positive KC-to-MBON connections. Training changed 3,013 to 3,283 permitted internal strengths per seed/reward condition, as well as the external action readout. Missing edges remained zero and all strengths remained nonnegative. The frozen-circuit control retained its internal weights exactly.",
+        {
+          "h": "Familiar maze: no clear winner over Q-learning"
+        },
+        "The plastic circuit scored 87.5% versus 85.0% for the replay Q table: +2.5 percentage points, with a paired seed-bootstrap 95% interval of -12.5 to +17.5 points. That does not establish an advantage. It improved over the frozen-circuit readout at 37.5%, showing that training internal modeled strengths can matter in this particular reduced architecture.",
+        {
+          "h": "Unseen layouts: the Q table transferred better"
+        },
+        "The replay Q table scored 52.3%; the plastic circuit scored 24.9%. Plastic minus Q was -27.4 percentage points, with a paired 95% interval of -35.7 to -18.05 points. Random movement scored 29.05%. The trained anatomical model did not demonstrate useful layout transfer in this experiment.",
+        {
+          "h": "No demonstrated benefit from recorded wiring"
+        },
+        "The degree-matched rewired network scored 95.0% familiar and 26.9% unseen. Plastic minus rewired was -7.5 points familiar (95% interval -15.0 to 0.0) and -2.0 points unseen (-7.5 to +3.6). The recorded wiring did not outperform this matched control.",
+        {
+          "note": "Conclusion: current Exp 2 is a tie between two equivalent Q learners. The new reduced plastic circuit learns, but these runs do not show that fly wiring is better than conventional learning. They also do not show that every possible fly-derived model must fail."
+        }
+      ]
+    },
+    {
+      "title": "Limits, evidence and reproduction",
+      "content": [
+        "The new model is a reduced feedforward rate network, not the full MaleCNS LIF simulation. Its input projection, tanh dynamics, action readout and gradient/Adam plasticity are engineered. There is no validated dopamine model, natural motor mapping or biological learning claim.",
+        "Ten optimization/experience seeds were tested, but only one sampled anatomical subcircuit and one degree-preserving rewiring. Intervals resample seed means after averaging rewarded A/B within each seed; they are not confidence intervals over all possible circuits. Hyperparameters and budgets were fixed rather than optimized separately for every model.",
+        "The existing 120-action timeout is treated as terminal, and remaining time is not an observation. This finite-horizon limitation applies to all compared agents. Test layouts are unseen, but absolute position and adjacent walls are observable. No full-map or shortest-path oracle enters a policy.",
+        "Approximate mean update-call times per condition on the GX10 host CPU: Q table 0.21 s, frozen-circuit readout 0.59 s, plastic circuit 0.70 s, rewired circuit 0.71 s. These exclude data collection, feature initialization and evaluation. Original full-graph probes used CUDA. Evaluation and immutable checkpoint checks passed.",
+        "Reproduce with the README comparison command. The compact, versioned report is docs/research/maze_comparison_results.md; its JSON supplies all learning-curve points and paired intervals. Raw experience, trials, circuit arrays and checkpoints remain outside Git under runs/gx10-a/exp_2_comparison and runs/gx10-b/exp_2_comparison.",
+        "Accepted run IDs: 20260921T060909Z-comparison-b15807 (original-controller audit) and 20260921T060903Z-comparison-a72cae (reduced-circuit comparison). Exact scientific source identity is recorded in each manifest and the compact report; immutable releases and a source archive preserve it.",
+        {
+          "note": "Bookkeeping correction: the first runner hashed its mutable progress pointer before its final update. Explicit finalization_repair.json records retain the original manifests. All 378 immutable artifacts verified after excluding that pointer; no scientific output was changed."
         }
       ]
     }

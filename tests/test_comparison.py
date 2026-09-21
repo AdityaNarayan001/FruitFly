@@ -1,4 +1,5 @@
-import copy,unittest
+import copy,tempfile,unittest
+from pathlib import Path
 import numpy as np
 from fruitflybrain.comparison.models import Network,Table,observe,all_observations,fingerprint
 from fruitflybrain.comparison.circuit import rewire
@@ -48,5 +49,12 @@ class ComparisonTests(unittest.TestCase):
         m.update(self.batch());np.testing.assert_array_equal(m.target_w,m.w);np.testing.assert_array_equal(m.target_readout,m.readout)
     def test_seed_level_bootstrap_zero_difference(self):
         result=paired_interval([0]*10);self.assertEqual(result['ci95'],[0.,0.]);self.assertEqual(result['seed_units'],10)
+    def test_learned_checkpoint_round_trip_and_continuation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for model in (Table(),Network(self.weights(),4,True),Network(self.weights(),4,False)):
+                batch=self.batch();model.update(batch);path=Path(tmp)/'policy.npz';model.save(path)
+                restored=type(model).load(path);self.assertEqual(model.state_hash(),restored.state_hash())
+                np.testing.assert_array_equal(model.values(batch['state']),restored.values(batch['state']))
+                model.update(batch);restored.update(batch);self.assertEqual(model.state_hash(),restored.state_hash())
 
 if __name__=='__main__':unittest.main()

@@ -7,6 +7,8 @@ from reportlab.platypus import Paragraph, Frame, Spacer, Table, TableStyle
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.colors import HexColor, white
 from reportlab.lib.enums import TA_LEFT
+from reportlab.graphics.shapes import Drawing, String, Rect
+from reportlab.graphics.charts.barcharts import VerticalBarChart
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'PLAN'
@@ -47,6 +49,21 @@ def render(doc):
                 for n in item['refs']:
                     ref=doc['references'][str(n)]
                     flow.append(p(f'<b>[{n:02d}] {escape(ref[0])}</b><br/><link href="{escape(ref[1])}" color="#007e87">{escape(ref[1])}</link>',SMALL))
+            elif 'bar_chart' in item:
+                data=item['bar_chart'];drawing=Drawing(W-88,224)
+                chart=VerticalBarChart();chart.x=32;chart.y=35;chart.width=W-137;chart.height=158
+                chart.data=data['series'];chart.categoryAxis.categoryNames=data['categories']
+                chart.categoryAxis.labels.fontName='Helvetica';chart.categoryAxis.labels.fontSize=8
+                chart.valueAxis.valueMin=0;chart.valueAxis.valueMax=100;chart.valueAxis.valueStep=20
+                chart.valueAxis.labels.fontSize=8;chart.valueAxis.visibleGrid=True
+                chart.valueAxis.gridStrokeColor=HexColor('#dce4e9');chart.bars[0].fillColor=TEAL
+                chart.bars[1].fillColor=HexColor('#d7a352');chart.bars.strokeColor=None
+                chart.barLabelFormat='%.1f';chart.barLabels.fontSize=7
+                drawing.add(chart)
+                for j,label in enumerate(data['labels']):
+                    x=35+j*210;drawing.add(Rect(x,207,9,9,fillColor=TEAL if j==0 else HexColor('#d7a352'),strokeColor=None))
+                    drawing.add(String(x+15,208,label,fontSize=9,fillColor=INK))
+                flow.extend([drawing,Spacer(1,10)])
         bottom=64; top=H-101-th
         fr=Frame(44,bottom,W-88,top-bottom,leftPadding=0,rightPadding=0,topPadding=0,bottomPadding=0)
         fr.addFromList(flow,c)

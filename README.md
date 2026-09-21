@@ -110,6 +110,10 @@ The prospective protocol is the dated v0.2 amendment in `PLAN/exp_2.pdf`, with m
 
 Each run contains `report.md`, `report.json`, raw trial outcomes, experience arrays, circuit body IDs and masks, learned parameter checkpoints, timing, a source archive and a status manifest. Only a completed non-smoke run supports conclusions. No benefit from biological wiring is established unless it also beats the matched randomized circuit under the stated controls.
 
+**Observed on 21 September 2026:** the original fly-probe Q and direct-image Q learners tied exactly (100% familiar, 28.5% unseen). In the separate shared-experience comparison, the replay Q table scored 85.0% familiar / 52.3% unseen; the trainable reduced fly circuit scored 87.5% / 24.9%; the degree-matched randomized circuit scored 95.0% / 26.9%. The small familiar-maze difference between plastic circuit and Q table was inconclusive across seeds. No advantage from recorded fly wiring was demonstrated. Compare agents within each part, since the parts use different training regimes and state representations. See the [full comparison and limitations](docs/research/maze_comparison_results.md).
+
+Verify copied records with `.venv/bin/python scripts/verify_comparison.py /path/to/run`. The original two runs include explicit audit records for a corrected progress-file checksum; scientific outputs are unchanged. Learned policies can be reconstructed with `Table.load(path)` or `Network.load(path, plastic=True/False)` from `fruitflybrain.comparison.models`. This restores the policy/optimizer state; resuming a complete experiment also requires its saved protocol and replay RNG position.
+
 ## Neural anatomy explorer: inputs, circuits and outputs
 
 For the **actual annotated brain/CNS**, without starting either experiment:

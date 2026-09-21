@@ -3,7 +3,7 @@
 | Document | Version | Date | Status |
 | --- | --- | --- | --- |
 | plan.pdf | 1.0 | 2026-09-19 | Beginner handbook: biology, data examples, full UI reference, portable setup and research roadmap |
-| exp_2.pdf | 0.2 | 2026-09-21 | Original protocol plus prospective tabular / trainable reduced-connectome comparison |
+| exp_2.pdf | 0.3 | 2026-09-21 | Original protocol, prospective comparison amendment, and dated observed results |
 | exp_1.pdf | 0.2 | 2026-09-19 | Prospective visual-motion protocol plus dated interactive engineering amendment; evaluation remains gated |
 
 Editable content is in this directory's JSON files. From the project root, rebuild with `python docs/research/build_pdfs.py` using ReportLab. Output goes only to `PLAN/plan.pdf` and `PLAN/exp_*.pdf`. These are local prospective documents, not external preregistrations. The project repository is https://github.com/AdityaNarayan001/FruitFly. Statements in the dated PDFs about Git being deferred describe their preparation before initial publication.
@@ -23,3 +23,5 @@ Record revisions here, including whether relevant results had been observed. Kee
 2026-09-20 Experiment 2: an 11-page prospective protocol was generated before implementation or learning outcomes. Rendered and inspected all pages. Original plan.pdf and exp_1.pdf bytes are preserved. Rebuild only the new document with `python docs/research/build_pdfs.py exp_2.json`; the generic builder now supports a document-specific date and an explicit file selection. Development results remain in STATUS.md and run records.
 
 2026-09-21 v0.2: added the matched comparison protocol before implementing or observing the new plastic-network benchmark. Original Exp 2 results were known and are explicitly identified. Real-data default setup correction is dated in the amendment. No full-brain training or biological learning claim.
+
+2026-09-21 v0.3: after completing both ten-seed comparisons, appended observed results, the familiar/unseen chart, paired intervals, parameter-change evidence and limitations. No anatomy advantage was demonstrated. The original v0.2 prospective PDF is preserved by Git commit f9b49bb; one current exp_2.pdf remains in PLAN. Raw-run hashes verified with an explicit audit correction for the mutable progress pointer.
