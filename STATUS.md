@@ -51,3 +51,14 @@ Following the user's preference for the original Experiment 1 brain view, all th
 - Shared experience: 20,000 transitions, 2,000 replay batches of 64, ten seeds, both reward assignments. Final familiar/unseen success: Q table 85.0%/52.3%; frozen circuit plus trained readout 37.5%/19.6%; plastic anatomical circuit 87.5%/24.9%; degree-matched rewired plastic circuit 95.0%/26.9%; random 31.3%/29.05%. Each agent/split has 2,000 evaluation trials.
 - Plastic minus Q: familiar +2.5 percentage points (paired seed-bootstrap 95% interval -12.5 to +17.5), unseen -27.4 (-35.7 to -18.05). No established familiar advantage; Q transferred better in this setting. No demonstrated anatomical benefit over the matched rewired network. One sampled circuit, fixed untuned hyperparameters and finite-horizon limitations constrain interpretation.
 - Scientific source SHA-256: `f80cf6c780fc2783550d622e8fb15e8d8d626bfefdccce5024dccfec3f960f9e`. Source archive, raw shared experience, checkpoints, all trials and manifests are preserved outside Git. Compact derived results are in `docs/research/maze_comparison_results.md` and JSON. The first runner hashed progress before its final update; explicit audit records preserve original manifests and verify all 378 immutable artifacts. No scientific output was changed by that bookkeeping repair.
+
+## 21 September 2026: prospective full-scale comparison
+
+At the user's request, Exp 2 v0.4 specifies a separate full-retained-graph recurrent
+rate benchmark, before its behavioral outcomes exist. The original live services
+are preserved. All 166,700 modeled nodes and 25,582,938 edge slots are advanced;
+reward gradients can change existing nonzero internal strengths and an engineered
+action readout. Five seeds, both reward choices, 10,000 shared chronological
+transitions and 50 familiar/50 unseen trials per condition are fixed prospectively.
+Small-graph numerical gradients and CPU/CUDA agreement passed. Whole-graph
+engineering preflight and behavioral results remain pending at this entry.

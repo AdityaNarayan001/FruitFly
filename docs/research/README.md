@@ -25,3 +25,9 @@ Record revisions here, including whether relevant results had been observed. Kee
 2026-09-21 v0.2: added the matched comparison protocol before implementing or observing the new plastic-network benchmark. Original Exp 2 results were known and are explicitly identified. Real-data default setup correction is dated in the amendment. No full-brain training or biological learning claim.
 
 2026-09-21 v0.3: after completing both ten-seed comparisons, appended observed results, the familiar/unseen chart, paired intervals, parameter-change evidence and limitations. No anatomy advantage was demonstrated. The original v0.2 prospective PDF is preserved by Git commit f9b49bb; one current exp_2.pdf remains in PLAN. Raw-run hashes verified with an explicit audit correction for the mutable progress pointer.
+
+- 21 September 2026, v0.4: Exp 2 gained a prospective full-retained-connectome
+  amendment (pages 20-22), before full-scale implementation and maze results.
+  Prior reduced-circuit outcomes were already known. Configuration stores the
+  exact prospective PDF hash. Continuous bounded recurrence and truncated
+  two-tick TD gradients are engineered assumptions, not validated physiology.

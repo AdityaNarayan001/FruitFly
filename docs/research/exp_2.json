@@ -3,9 +3,9 @@
   "title": "Experiment 2: reward-guided pattern choice and maze navigation",
   "subtitle": "Prospective hybrid controller protocol and interactive laboratory specification",
   "code": "EXP 02",
-  "version": "0.3",
+  "version": "0.4",
   "date_label": "21 SEP 2026",
-  "footer": "Exp 2 v0.3 | Prospective protocol + dated observed results | No biological-learning claim",
+  "footer": "Exp 2 v0.4 | Full-graph prospective amendment | Engineered rate model",
   "references": {
     "1": [
       "Watkins and Dayan. Q-learning. Machine Learning (1992).",
@@ -336,6 +336,46 @@
         "Accepted run IDs: 20260921T060909Z-comparison-b15807 (original-controller audit) and 20260921T060903Z-comparison-a72cae (reduced-circuit comparison). Exact scientific source identity is recorded in each manifest and the compact report; immutable releases and a source archive preserve it.",
         {
           "note": "Bookkeeping correction: the first runner hashed its mutable progress pointer before its final update. Explicit finalization_repair.json records retain the original manifests. All 378 immutable artifacts verified after excluding that pointer; no scientific output was changed."
+        }
+      ]
+    },
+    {
+      "title": "Full-scale amendment: scope",
+      "content": [
+        "21 September 2026, 06:32 UTC. Written before implementing or observing this full-graph learning test. The earlier reduced-circuit results are already known and remain above. This new test is separate from the original live maze service and leaves its behavior unchanged.",
+        "Use every node and CSR edge slot in the retained MaleCNS-derived graph: 166,700 neurons and 25,582,938 directed connections. Zero signed-weight entries remain zero. This is the entire prepared graph, not a claim to include every cell, synapse, physiology or body system of the living animal.",
+        "The full graph advances twice per maze observation, carrying neural state between actions and resetting at each trial boundary. A bounded recurrent rate model replaces LIF dynamics for this isolated comparison. Activity represents signed normalized deviations, not measured voltages, spikes or validated biological firing rates.",
+        {
+          "h": "Inputs and outputs are engineered"
+        },
+        "The same 24 features are provided to all controllers: one-hot x and y, the assignment of two opposite pattern identities, and four adjacent legal-move bits. No reward identity, full maze, distance or path oracle is supplied. A fixed random signed channel assignment drives annotated sensory populations. Four learned linear action readouts pool all modeled neurons. These are explicit modeling choices, not natural fly sensory or motor pathways.",
+        {
+          "note": "Full scale describes the retained network size and continuous use. It does not establish a complete functional reconstruction of a fly brain or biological learning."
+        }
+      ]
+    },
+    {
+      "title": "Full network: dynamics and learning",
+      "content": [
+        "Initialize each nonempty row of signed W to absolute sum 0.45. For two integration ticks, h_next = 0.5 h + 0.5 tanh(W h + input). Each trainable weight retains its original sign and is clipped between zero and twice its initial magnitude. Thus the maximum absolute incoming sum stays at most 0.9, and activity remains bounded.",
+        "Train action values by semi-gradient temporal-difference learning: target = reward + 0.95 times the best legal next-action value. Genuine food outcomes have no bootstrap; the 120-action time limit is treated as a truncation. Preview the next observation without committing neural state. Clip TD error to [-1,1].",
+        "The full plastic model updates every eligible internal edge using the derivative through both integration ticks of the current observation, with learning rate 0.01. Detach neural history before this observation. The action readout uses normalized updates: learning rate 0.25 divided by 1 + squared activity norm. Bias receives the same normalization. No optimizer state, target network or natural dopamine rule is implied.",
+        "Frozen control: same graph and continuous state, but only the action readout trains. Plastic wiring control: shuffle presynaptic indices within positive and negative edge strata, preserving each row weight multiset and source degree counts within sign. This configuration-model multigraph may contain parallel edges and self-loops; report them and do not claim a simple-graph null.",
+        {
+          "note": "Input projection and initial action readout are matched across the three neural conditions. Neural state is recurrent, but temporal gradients stop at each observation boundary. This is a bounded engineering model, not fitted fly physiology."
+        }
+      ]
+    },
+    {
+      "title": "Full-scale test: fixed budget",
+      "content": [
+        "Before outcomes: five seeds (0-4), both rewarded patterns, 10,000 uniformly random legal-action transitions per seed/reward condition, one chronological pass per learner. Preserve episode reset flags. All four trained conditions receive exactly the same experience: tabular Q, frozen full graph, plastic full graph and plastic rewired full graph. Add a random-action evaluation reference.",
+        "For each condition, evaluate the frozen final policy on 50 familiar-maze trials and 50 unseen-maze trials. The 25 unseen layouts each appear with both cue assignments. Test namespaces are disjoint from training. Neural evaluation advances the graph for every action; no observation-response cache is permitted. Manual actions never enter these records.",
+        "Primary endpoint is final familiar success; unseen-layout transfer is separate. Report returns, steps, route efficiency, timing, parameter counts, changed-edge counts, activity coverage and paired differences. Average both reward assignments within each seed, then bootstrap five seed units 10,000 times for descriptive 95% intervals. Five seeds give limited uncertainty resolution.",
+        "Before running behavior: verify numerical gradients on small graphs, CPU/CUDA agreement, reset/preview state isolation, sign bounds, frozen controls and finite whole-graph activity. Engineering timing may be measured without inspecting maze performance. No tuning or changing budgets after behavioral results are observed; failures and deviations are retained.",
+        "Save the exact protocol/PDF fingerprint, source archive, graph hashes, input mapping, rewired indices, raw experience, all final policies, trial records and immutable artifact hashes. Runs are isolated on both GX10s; they do not distribute one brain across machines. Compare within this protocol, not directly with the earlier different-budget benchmark.",
+        {
+          "note": "No outcome exists for this full-scale protocol when these pages are authored. A negative result remains useful: it tests this stated model and training budget, not every possible full-brain model."
         }
       ]
     }

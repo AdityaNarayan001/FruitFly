@@ -329,3 +329,41 @@ Legacy batch-engineering configs under `configs/` are retained for the original 
 MaleCNS is a collaboration involving Janelia/FlyEM, Cambridge, MRC-LMB and Google Research. See the [official dataset](https://male-cns.janelia.org/download/), [Cell paper](https://doi.org/10.1016/j.cell.2026.08.015) and [Google overview](https://research.google/blog/a-connectomics-milestone-mapping-the-complete-male-fruit-fly-brain/). Dataset CC-BY terms and dependency licenses remain separate. A project software license has not yet been selected; publishing the repository does not itself grant a software license.
 
 Before scientific visual-motion evaluation: validate mapping and model stability, define evidence-backed readout populations, implement the specified connectivity control, and record a dated freeze amendment. Experiment 2 has its own prospective protocol and does not remove Experiment 1's scientific gates. Numerical tests and a working UI do not establish biological validity.
+
+### Full retained-connectome maze test (Exp 2 v0.4)
+
+This **separate, command-line benchmark** advances all 166,700 retained neurons and
+25,582,938 directed edge slots for every observation, with state carried between
+maze actions. It uses an explicitly artificial, bounded recurrent rate model,
+not the original LIF dynamics or cached visual responses. Its engineered sensory
+projection receives position, cue assignment and adjacent walls. A learned
+four-action readout pools all neurons. Reward-driven TD gradients update modeled
+internal strengths in the plastic variants; absent/zero signed weights remain zero.
+The original interactive Exp 1, Exp 2 and anatomy explorer remain unchanged.
+
+The fixed protocol is `configs/exp_2_fullscale.json` and the dated amendment in
+`PLAN/exp_2.pdf`: five seeds, both reward choices, 10,000 shared transitions and
+50 frozen familiar plus 50 unseen trials per condition. Controls are tabular Q,
+frozen full graph with learned readout, plastic full graph, sign-stratified rewired
+plastic graph and random movement. Equal experience is not equal compute.
+This tests the stated model and budget, not a fully reconstructed biological fly.
+
+For the full-size run, use Linux with an NVIDIA GPU, CUDA toolkit (`nvcc`) and the
+prepared real graph. macOS can inspect results and run the small CPU reference
+tests; the full-scale runner requires CUDA. After the existing setup/data preparation:
+
+```sh
+.venv/bin/python scripts/build_fullscale.py
+PYTHONPATH=src FFB_FULLSCALE_CUDA=1 .venv/bin/python -m unittest discover -s tests -p test_fullscale.py -v
+PYTHONPATH=src .venv/bin/python -m fruitflybrain.fullscale --graph data/malecns-graph-v1 --runs runs/exp_2_fullscale --preflight
+PYTHONPATH=src .venv/bin/python -m fruitflybrain.fullscale --graph data/malecns-graph-v1 --runs runs/exp_2_fullscale
+```
+
+Optional `--targets A` / `--targets B` or `--seeds 0 1` partition the exact protocol
+across machines. Keep every required partition when aggregating. Each process runs
+one full network at a time, and does not combine the two GPUs into one simulation.
+Native builds live in their exact deployed release; launch remote runs from that
+release with its `PYTHONPATH=src` and the shared `../../.venv/bin/python` environment.
+Records include raw experience, body-ID input mapping, null wiring, full learned
+weight arrays, complete trial paths, parameter checks, exact source archives and
+immutable hashes. Native checkpoint replay starts at a fresh trial boundary.

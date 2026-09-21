@@ -1,0 +1,33 @@
+{
+  "protocol": "Exp 2 v0.4 full-scale prospective amendment 2026-09-21",
+  "defined_utc": "2026-09-21T06:32:00Z",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "rewarded_patterns": [
+    "A",
+    "B"
+  ],
+  "transitions": 10000,
+  "evaluation_episodes": 50,
+  "ticks_per_observation": 2,
+  "initial_incoming_norm": 0.45,
+  "leak": 0.5,
+  "synaptic_learning_rate": 0.01,
+  "readout_learning_rate": 0.25,
+  "gamma": 0.95,
+  "tabular_alpha": 0.25,
+  "td_clip": 1.0,
+  "weight_multiple_limit": 2.0,
+  "mapping_seed": 20260921,
+  "rewiring_seed": 9212026,
+  "scope": "All retained graph nodes and edge slots; artificial bounded recurrent rate model; not biological physiology",
+  "learning": "Two-tick semi-gradient TD, history detached each observation, sign-constrained internal weights plus normalized readout",
+  "timeout": "Truncation; bootstrap, then reset neural/environment state",
+  "status_at_definition": "Prior reduced-model results known; no full-scale behavioral outcomes observed",
+  "prospective_pdf_sha256": "2fc4b58341692915a48a1f3d466be5fc467ab30c10c30e0444b0f3059ed3206b"
+}
