@@ -37,3 +37,9 @@ Record revisions here, including whether relevant results had been observed. Kee
   strengths, with no retraining or changes to the primary protocol. All ten saved
   plastic conditions and all primary trial definitions are included. This is an
   explanatory ablation, not a prospectively independent confirmation.
+
+- 21 September 2026, v0.5: Exp 2 now has 27 pages. Pages 23-27 append verified
+  full-scale outcomes and the explicitly post-hoc zero-recurrence diagnostic.
+  The 22-page prospective v0.4 PDF remains recoverable from commit 9fccab1 and
+  its hash remains in the primary config. No primary training changes followed
+  observed scores. `fullscale_results.md` and JSON include the complete audit.

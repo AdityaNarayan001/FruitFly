@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Post-hoc zero-recurrence diagnostic, separate from the prospective comparison."""
-import argparse,json,sys,time
+import argparse,json,sys,time,os
 from pathlib import Path
 import numpy as np
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'src'))
@@ -63,10 +63,11 @@ def diagnose(paths):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('runs',nargs='+',type=Path);p.add_argument('--output',type=Path,default=ROOT/'docs/research/fullscale_diagnostic.json');p.add_argument('--trials-output',type=Path,default=ROOT/'runs/fullscale_diagnostic_trials.jsonl')
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('runs',nargs='+',type=Path);p.add_argument('--output',type=Path,default=ROOT/'runs/exp_2_fullscale_diagnostic/diagnostic.json');p.add_argument('--trials-output',type=Path,default=None)
     args=p.parse_args()
+    if args.trials_output is None:args.trials_output=args.output.with_name(args.output.stem+'-trials.jsonl')
     if args.output.exists() or args.trials_output.exists():p.error('Choose fresh output paths; records are immutable')
     protocol=json.loads((ROOT/'configs/exp_2_fullscale_diagnostic.json').read_text());source=source_manifest();snapshot=preserve_source(args.trials_output.parent,source)
     report,details=diagnose(args.runs);args.trials_output.parent.mkdir(parents=True,exist_ok=True)
-    args.trials_output.write_text(''.join(json.dumps(r)+'\n' for r in details));report['trials_sha256']=sha256(args.trials_output);report['diagnostic_source_sha256']=source['sha256'];report['source_snapshot']=snapshot;report['protocol']=protocol;report['environment']=environment();report['input_runs']=[str(r.resolve()) for r in args.runs]
+    args.trials_output.write_text(''.join(json.dumps(r)+'\n' for r in details));report['trials_sha256']=sha256(args.trials_output);report['trials_file']=os.path.relpath(args.trials_output,args.output.parent);report['diagnostic_source_sha256']=source['sha256'];report['source_snapshot']=snapshot;report['protocol']=protocol;report['environment']=environment();report['input_runs']=[str(r.resolve()) for r in args.runs]
     atomic_json(args.output,report);print(json.dumps({k:report[k] for k in ('identical_paths','identical_outcomes','trials')},indent=2))

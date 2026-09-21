@@ -1,6 +1,8 @@
 # Project status
 
-Updated 2026-09-19. Phase: interactive engineering workbench. No visual-motion or learning result yet.
+Updated 2026-09-21. Full-scale maze comparison completed: tabular Q outperformed the current full-connectome model. Original live interfaces are preserved; biological dynamics and natural behavior remain unvalidated. See the dated results below.
+
+## Initial engineering work (19 September 2026)
 
 - Completed: research overview and prospective Experiment 1 PDFs, rendered and visually reviewed.
 - Completed: local source layout, immutable hash-based deployment and preserved source snapshots; Git publication authorized to AdityaNarayan001/FruitFly.
@@ -62,3 +64,43 @@ action readout. Five seeds, both reward choices, 10,000 shared chronological
 transitions and 50 familiar/50 unseen trials per condition are fixed prospectively.
 Small-graph numerical gradients and CPU/CUDA agreement passed. Whole-graph
 engineering preflight and behavioral results remain pending at this entry.
+
+
+## 21 September 2026: full-scale observed results
+
+- Completed primary runs: gx10-a `20260921T063920Z-fullscale-e4d345` and gx10-b
+  `20260921T063951Z-fullscale-29e490`, exact scientific source
+  `1dd798bb860a282714893a48033d73346b47c9789ec8188ffe508e74217357e6`.
+  Prospective protocol/implementation commit: `9fccab1`; no test-result tuning.
+- All 166,700 retained nodes and 25,582,938 edge slots advanced on each neural
+  decision, with state between actions. The isolated model uses bounded signed
+  rate dynamics and a two-tick semi-gradient TD rule, not the original LIF model.
+- Five seeds, both reward choices, 10,000 shared chronological transitions per
+  condition, 500 familiar and 500 unseen trials per agent. Familiar/unseen success:
+  Q table 100.0%/51.8%; frozen full graph 10.0%/10.2%; plastic full graph 10.0%/10.2%;
+  rewired plastic full graph 10.0%/10.2%; random 31.2%/28.4%.
+- Plastic minus Q: familiar -90 percentage points (95% paired seed-bootstrap
+  interval -100 to -80); unseen -41.6 (-46.4 to -35.8). No benefit from recorded
+  wiring or the current plasticity rule. This is a result for one fixed untuned
+  model/budget, not evidence against all connectome-based learning.
+- Anatomical plasticity changed 8,383,190-8,688,335 nonzero strengths, but total
+  relative L2 change was only 0.001691%-0.002515%. All signs/bounds and frozen
+  controls verified. During training 142,850-143,092 modeled neurons exceeded
+  the activity threshold; all nodes were numerically simulated.
+- Explicitly post-hoc diagnostic: removing recurrence from saved policies,
+  retaining sensory mapping/readout, preserved 989/1,000 complete paths and
+  995/1,000 outcomes. Diagnostic source
+  `45682d6b45bf5a5d936cf5a57d4375119848b4a060f1ecf6faa3ce0e456b9593`.
+  It ran on GX10 host CPUs; CPU/CUDA rounding may contribute to the few differing
+  paths. Most behavior is insensitive to recurrent processing in this setup.
+- Independently checked 64 immutable primary artifacts, all 30 full neural
+  checkpoint arrays, and replayed all 5,000 primary trajectories. All neural
+  evaluations preserved parameter hashes; checkpoint reload replay checks passed.
+  Original regression suite: 41 tests, two CUDA-specific skips on Mac; the five
+  full-scale tests, including CUDA agreement, passed on both GX10s.
+- Raw primary/diagnostic data, weights and both source archives are synchronized
+  to the Mac outside Git. Compact verified results are in
+  `docs/research/fullscale_results.{md,json}`. `PLAN/exp_2.pdf` v0.5 appends observed
+  results while preserving the prospective pages and earlier experiments.
+- Exp 1, live Exp 2 and the explorer remain unchanged and running. The disconnected
+  Mac tunnel to Exp 1 was restored; ports 8765, 8767 and 8768 respond locally.

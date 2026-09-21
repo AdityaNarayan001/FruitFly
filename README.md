@@ -2,7 +2,7 @@
 
 A local, interactive workbench for connectome-based neural experiments. Draw an input, send a neural pulse, inspect model activity, and save an auditable session. It runs on a **CPU** or, on compatible Linux systems, **NVIDIA CUDA**.
 
-**Scientific status:** exploratory software. Experiment 1 has no learning or validated motor decoder; Experiment 2 trains an external Q-learning controller while keeping neural weights fixed. The real-data input map and dynamics still need biological validation; strong pulses can produce unrealistic voltages. The default installation uses the **real MaleCNS connectome** and preserves Experiment 1's rotatable brain landmark view.
+**Scientific status:** exploratory software. Experiment 1 has no learning or validated motor decoder; The interactive Experiment 2 trains an external Q-learning controller while keeping neural weights fixed. A separate full-connectome benchmark trains modeled internal strengths and a readout; it did not outperform tabular Q under the tested budget (see [full-scale results](docs/research/fullscale_results.md)). The real-data input map and dynamics still need biological validation; strong pulses can produce unrealistic voltages. The default installation uses the **real MaleCNS connectome** and preserves Experiment 1's rotatable brain landmark view.
 
 ## Clone once and choose a dataset
 
@@ -382,3 +382,28 @@ experience, exact trial coverage, and replays every saved maze path. It refuses
 engineering preflights, incomplete partitions and duplicate conditions. Its compact
 JSON/Markdown report is written to `docs/research/fullscale_results.*`; no raw
 learned weights or dataset files are committed to Git.
+
+**Observed full-scale result (21 September 2026):** tabular Q achieved 100.0%
+familiar / 51.8% unseen success; full plastic, frozen full and rewired full each
+achieved 10.0% / 10.2%. Each score uses 500 trials, with uncertainty estimated
+across five training seeds. Internal strengths changed only 0.001691%-0.002515%
+in relative L2 magnitude. A separate post-hoc CPU zero-recurrence diagnostic
+preserved 989/1,000 full paths; CPU/CUDA rounding may contribute to the small
+subset of differences. This model is largely driven by its engineered sensory
+readout and shows no demonstrated benefit from the connectome for this task.
+These results do not rank every possible biological or artificial learning model.
+See [the verified report](docs/research/fullscale_results.md) and the v0.5 amendment
+in `PLAN/exp_2.pdf` for counts, controls, limitations and source identities.
+
+To reproduce the explicitly post-hoc diagnostic on a compute host, after a primary
+run completes, pass its printed run directory (or both synchronized partitions):
+
+```sh
+OPENBLAS_NUM_THREADS=1 PYTHONPATH=src .venv/bin/python scripts/diagnose_fullscale.py \
+  runs/exp_2_fullscale/YOUR_COMPLETED_RUN \
+  --output runs/exp_2_fullscale_diagnostic/new-audit.json
+```
+
+This performs no learning and never substitutes for the full-graph GPU run. The
+JSON and raw diagnostic trials are stored together outside Git. Add their JSON
+paths with `--diagnostics` to the summary command to include the separate audit.

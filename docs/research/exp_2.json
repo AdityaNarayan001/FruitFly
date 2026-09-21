@@ -3,9 +3,9 @@
   "title": "Experiment 2: reward-guided pattern choice and maze navigation",
   "subtitle": "Prospective hybrid controller protocol and interactive laboratory specification",
   "code": "EXP 02",
-  "version": "0.4",
+  "version": "0.5",
   "date_label": "21 SEP 2026",
-  "footer": "Exp 2 v0.4 | Full-graph prospective amendment | Engineered rate model",
+  "footer": "Exp 2 v0.5 | Full-scale observed results + separate post-hoc diagnostic",
   "references": {
     "1": [
       "Watkins and Dayan. Q-learning. Machine Learning (1992).",
@@ -376,6 +376,108 @@
         "Save the exact protocol/PDF fingerprint, source archive, graph hashes, input mapping, rewired indices, raw experience, all final policies, trial records and immutable artifact hashes. Runs are isolated on both GX10s; they do not distribute one brain across machines. Compare within this protocol, not directly with the earlier different-budget benchmark.",
         {
           "note": "No outcome exists for this full-scale protocol when these pages are authored. A negative result remains useful: it tests this stated model and training budget, not every possible full-brain model."
+        }
+      ]
+    },
+    {
+      "title": "Observed full-scale results",
+      "content": [
+        "Written 21 September 2026, 07:20 UTC, after all primary runs and the separate diagnostic finished. The v0.4 full-scale protocol was saved and committed before behavioral runs began. The original reduced-circuit and cached-probe results above remain separate experiments.",
+        "The fixed budget covered five seeds, both reward choices and 10,000 identical recorded training transitions per condition. Each of five agents had 500 familiar and 500 unseen frozen trials in total. The neural conditions advanced the full graph on every action, with no pattern-response cache.",
+        {
+          "bar_chart": {
+            "series": [
+              [
+                100.0,
+                10.0,
+                10.0,
+                10.0
+              ],
+              [
+                51.800000000000004,
+                10.200000000000001,
+                10.200000000000001,
+                10.200000000000001
+              ]
+            ],
+            "categories": [
+              "Q table",
+              "Frozen full",
+              "Plastic full",
+              "Rewired full"
+            ],
+            "labels": [
+              "Familiar maze success (%)",
+              "Unseen maze success (%)"
+            ]
+          }
+        },
+        "Tabular Q: 100.0% (500/500) familiar and 51.8% (259/500) unseen. Full plastic graph: 10.0% (50/500) familiar and 10.2% (51/500) unseen.",
+        "Random movement reference: 31.2% (156/500) familiar and 28.4% (142/500) unseen.",
+        {
+          "note": "The full-connectome model did not beat tabular Q under this stated budget. This compares an engineered full-graph model with a Q table; it is not a test of a living fly or every possible connectome-based learning method."
+        }
+      ]
+    },
+    {
+      "title": "How full was the simulation?",
+      "content": [
+        "Every neural decision advanced all 166,700 retained neurons and all 25,582,938 CSR edge slots. Neural activity persisted between actions and reset at trial boundaries. The entire prepared graph was used, including quiet cells. This is the retained dataset, not a claim to reconstruct every physiological detail of an animal.",
+        "Of the edge slots, 24,469,412 began with nonzero signed strength. The other slots stayed zero. Engineered position, cue-assignment and wall features drove 17,885 annotated sensory neurons. Four learned action-value readouts pooled the modeled population.",
+        "During anatomical-model training, 142,850 to 143,092 neurons exceeded the reporting threshold of 0.000001 normalized activity. A descriptive graph audit found 166,614 neurons structurally reachable from the input population and 86 unreachable. Reachability does not guarantee strong activity: attenuation, cancellation and unused input channels can keep cells quiet.",
+        {
+          "h": "Strengths changed, but only slightly"
+        },
+        "Training changed 8,383,190 to 8,688,335 existing internal strengths in each full-plastic condition. However, the norm of the total weight change was only 0.001691% to 0.002515% of the initial weight norm. A large count of changed entries should not be mistaken for a large functional adaptation.",
+        "Frozen internal weights remained exactly unchanged; their action readouts trained. All plastic variants retained the declared signs and bounds. These checks establish implementation behavior, not biological learning.",
+        {
+          "note": "This model uses bounded signed rate deviations, two integration ticks per observation and a short semi-gradient TD rule. It does not simulate validated spikes, chemical signaling, natural dopamine plasticity or fitted fly physiology."
+        }
+      ]
+    },
+    {
+      "title": "Paired comparisons and limits",
+      "content": [
+        {
+          "h": "Full plastic graph versus Q table"
+        },
+        "Familiar success difference: -90.0 percentage points (paired 95% interval -100.0 to -80.0). Unseen success difference: -41.6 percentage points (paired 95% interval -46.4 to -35.8).",
+        {
+          "h": "Does plasticity or recorded wiring help?"
+        },
+        "Plastic minus frozen graph: +0.0 percentage points (paired 95% interval +0.0 to +0.0) familiar; +0.0 percentage points (paired 95% interval +0.0 to +0.0) unseen.",
+        "Anatomical plastic minus rewired plastic: +0.0 percentage points (paired 95% interval +0.0 to +0.0) familiar; +0.0 percentage points (paired 95% interval +0.0 to +0.0) unseen.",
+        "Intervals resample five seed means, after averaging both reward assignments within each seed. Familiar trials repeat one layout and two cue assignments; 500 trials are not 500 independent training replications. Only one input mapping and one sign-stratified wiring null were used.",
+        "The null preserved each row weight multiset and sign-stratified source degree counts, but allowed parallel pairs and self-edges. It contained 74,530 excess parallel edges and 297 self-edges. Unseen mazes changed walls but retained start and food coordinates. No path or reward identity entered the policy.",
+        {
+          "note": "No test-result tuning was performed. The single-pass budget, very small internal changes, directly accessible sensory readout and short gradient history limit what this result says about stronger learning methods. Network size alone does not establish useful task computation."
+        }
+      ]
+    },
+    {
+      "title": "Does the policy need recurrence?",
+      "content": [
+        "This diagnostic was defined after partial primary outcomes revealed matching neural success rates. It is explicitly post hoc. The primary models, seeds, experience, hyperparameters and evaluation were left unchanged.",
+        "For every saved full-plastic policy, remove all recurrent strengths and retain its input mapping, learned action readout and bias. Reset at each trial, retain the same two-tick rate equations, and repeat all 1,000 primary trial definitions. No retraining occurs. The zero sparse product is omitted algebraically for this diagnostic only.",
+        "Complete paths matched on 989/1000 trials, and terminal outcomes matched on 995/1000. These are direct paired comparisons with the saved full-plastic controller, checked again against raw trial records.",
+        "The diagnostic ran in NumPy float32 on the GX10 host CPUs. Its zero-recurrence equations were checked against the sparse CPU reference. It must not be confused with the primary CUDA experiment, which actually computed through the full graph.",
+        {
+          "note": "Most paths remained identical despite removing recurrence, supporting sensory/readout dominance in this setup. The small differing subset also changes numerical backend (CPU versus CUDA); rounding may contribute, so it is not a pure causal estimate of recurrence. Unchanged success alone does not prove that a circuit has no effect."
+        },
+        "A stronger follow-up would require a new dated protocol, training/validation separation, stronger verified internal adaptation and a readout that cannot directly bypass circuit processing. Such a follow-up was not silently folded into this comparison."
+      ]
+    },
+    {
+      "title": "Full-scale evidence and reproduction",
+      "content": [
+        "Independent verification checked 64 immutable primary artifacts, all 30 full neural checkpoints and all 5000 saved primary maze trajectories. Saved weight arrays matched recorded hashes, signs and bounds. Checkpoint reload reproduced the first familiar trial in each neural condition, and frozen evaluations preserved parameter hashes.",
+        "Mean training time per condition, excluding initialization/evaluation: q_table: 0.02 seconds, full_fixed: 42.69 seconds, full_plastic: 114.26 seconds, rewired_plastic: 217.28 seconds. Equal experience did not mean equal compute.",
+        "Trainable parameter counts: Q table 10,368; full frozen-graph readout 666,804; full plastic model 25,136,216. The two GX10s ran independent reward-condition partitions, not one distributed brain.",
+        "Accepted primary runs: 20260921T063920Z-fullscale-e4d345; 20260921T063951Z-fullscale-29e490. Exact scientific source SHA-256: 1dd798bb860a282714893a48033d73346b47c9789ec8188ffe508e74217357e6. The pre-outcome implementation/protocol commit is 9fccab1.",
+        "README.md documents build, run, partition and verification commands. The compact machine-readable report is docs/research/fullscale_results.json, with a readable .md companion. Raw experience, neural policies, source archives, mappings and trial paths remain outside Git under runs/.",
+        "The post-hoc diagnostic has its own config, source archive, raw trial files and recorded source identity. The report distinguishes it from the prospective experiment. CPU/CUDA agreement, gradient checks and the existing regression suite passed. Original Exp 1, live Exp 2 and the anatomical viewer remain unchanged.",
+        {
+          "note": "Keep one current exp_2.pdf in PLAN. Earlier protocol versions remain recoverable from Git, and immutable run/source archives preserve the code actually used for the science."
         }
       ]
     }

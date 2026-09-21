@@ -125,6 +125,39 @@ def aggregate(paths):
     return report
 
 
+
+def combine_diagnostics(paths,primary_paths):
+    reference={}
+    for root in primary_paths:
+        for line in (root/'trials.jsonl').read_text().splitlines():
+            row=json.loads(line)
+            if row['agent']=='full_plastic':reference[row['seed'],row['rewarded_pattern'],row['split'],row['trial']]=row
+    visited=set()
+    parts=[json.loads(p.read_text()) for p in paths];checks=[c for p in parts for c in p['checks']]
+    keys=[(c['seed'],c['rewarded_pattern']) for c in checks]
+    if set(keys)!={(s,t) for s in range(5) for t in ('A','B')} or len(keys)!=10:raise ValueError('Diagnostic needs all ten conditions exactly once')
+    if any(p['protocol']!=parts[0]['protocol'] or p['diagnostic_source_sha256']!=parts[0]['diagnostic_source_sha256'] for p in parts):raise ValueError('Diagnostic source/protocol mismatch')
+    for path,part in zip(paths,parts):
+        trials_path=path.parent/part['trials_file'] if 'trials_file' in part else path.with_name(path.stem+'-trials.jsonl')
+        if sha256(trials_path)!=part['trials_sha256']:raise ValueError('Diagnostic trials checksum mismatch')
+        raw=[json.loads(line) for line in trials_path.read_text().splitlines()]
+        if len(raw)!=part['trials']:raise ValueError('Diagnostic trial count mismatch')
+        same_paths=same_outcomes=0
+        for row in raw:
+            key=(row['seed'],row['rewarded_pattern'],row['split'],row['trial'])
+            if key in visited:raise ValueError('Duplicate diagnostic trial')
+            visited.add(key);before=reference[key]
+            if row['layout']!=before['layout'] or row['patterns']!=before['patterns']:raise ValueError('Diagnostic inputs differ')
+            same_paths+=row['path']==before['path'];same_outcomes+=row['outcome']==before['outcome']
+        if same_paths!=part['identical_paths'] or same_outcomes!=part['identical_outcomes']:raise ValueError('Diagnostic agreement counts mismatch')
+    if visited!=set(reference):raise ValueError('Missing diagnostic trials')
+    return {'status':'post_hoc_diagnostic','protocol':parts[0]['protocol'],
+      'numerical_limitation':'Diagnostic CPU float32 versus primary CUDA; rounding may contribute to the small differing subset. Not a pure causal estimate of recurrence.',
+      'diagnostic_source_sha256':parts[0]['diagnostic_source_sha256'],'parts':parts,
+      'identical_paths':sum(p['identical_paths'] for p in parts),'identical_outcomes':sum(p['identical_outcomes'] for p in parts),
+      'trials':sum(p['trials'] for p in parts),'checks':checks,'conditions':[c for p in parts for c in p['conditions']]}
+
+
 def markdown(r):
     endpoints=[d for d in r['paired_differences'] if d['b']=='q_table']
     outcome=' '.join(('Tabular Q performed better on '+d['split']+' success under this fixed budget.' if d['ci95'][1]<0 else 'The full plastic model performed better on '+d['split']+' success under this fixed budget.' if d['ci95'][0]>0 else 'The '+d['split']+' success difference from tabular Q was inconclusive.') for d in endpoints)
@@ -138,6 +171,8 @@ def markdown(r):
     text+=['','## Paired uncertainty','','Percentage-point differences, resampling five seed means after averaging reward A/B. These descriptive intervals have limited resolution.','']
     for d in r['paired_differences']:
         text.append(f"- {d['split']}: {d['a']} minus {d['b']}: {100*d['mean']:.2f} pp; 95% interval [{100*d['ci95'][0]:.2f}, {100*d['ci95'][1]:.2f}].")
+    if 'posthoc_diagnostic' in r:
+        d=r['posthoc_diagnostic'];text += ['','## Post-hoc recurrence diagnostic','',f"After partial primary outcomes, a separate frozen-policy ablation removed every recurrent connection while retaining the learned sensory readout. No retraining was done. {d['identical_paths']}/{d['trials']} complete paths and {d['identical_outcomes']}/{d['trials']} outcomes matched the original full-plastic controller. This is an explanatory post-hoc result, separate from the prospective comparison. The ablation used CPU float32 while the original used CUDA: numerical rounding may contribute to the small subset of differences, so those differences are not a pure causal estimate of recurrence."]
     text+=['','## What was simulated and trained','',
       f"Every decision advanced {r['anatomy']['neurons']:,} nodes and {r['anatomy']['edge_slots']:,} edge slots. Of these, {r['anatomy']['nonzero_signed_edges']:,} had nonzero signed initial weights; zero weights stayed zero. Engineered input drove {r['anatomy']['input_neurons']:,} annotated sensory neurons.",'']
     for a in ('full_fixed','full_plastic','rewired_plastic'):
@@ -145,7 +180,7 @@ def markdown(r):
         text.append(f"- {a}: {min(edges):,}-{max(edges):,} internal edge strengths changed; {min(active):,}-{max(active):,} neurons exceeded the activity threshold during training. All nodes were simulated, including quiet ones.")
     if 'independent_audit' in r:
         audit=r['independent_audit'];changes=[v['relative_internal_l2_change'] for v in audit['relative_internal_changes'] if v['agent']=='full_plastic']
-        text += ['',f"Full anatomical plasticity changed the global internal-weight L2 norm by {100*min(changes):.6f}% to {100*max(changes):.6f}% relative to initialization (norm of the change divided by initial norm). Count of changed edges alone does not establish a large functional change.",f"{audit['structurally_reachable_from_input_via_nonzero_edges']:,} nodes are structurally reachable from driven inputs through nonzero modeled edges; {audit['unreachable_from_input']} are not. Thresholded activity can be lower because of attenuation/cancellation."]
+        text += ['',f"The magnitude of the anatomical internal-weight change was {100*min(changes):.6f}% to {100*max(changes):.6f}% of the initial weight norm (L2 norm of the change divided by initial L2 norm). Count of changed edges alone does not establish a large functional change.",f"{audit['structurally_reachable_from_input_via_nonzero_edges']:,} nodes are structurally reachable from driven inputs through nonzero modeled edges; {audit['unreachable_from_input']} are not. Thresholded activity can be lower because of attenuation/cancellation."]
     text+=['','All neural evaluations preserved parameter hashes; reloaded checkpoints reproduced the first familiar trial. Raw saved paths were replayed independently to verify each outcome.','',
       '## Limits','',
       'This is one artificial recurrent model, one fixed sensory projection, one fixed multigraph wiring null and a fixed training budget. The generic rate dynamics, sign normalization, privileged grid localization, four-action readout and two-tick truncated gradient rule are engineered. There is no validated natural sensory/motor mapping or dopamine mechanism. A weak result cannot rule out other dynamics, learning rules or budgets. Q-learning and the neural models are not separately hyperparameter-optimized. Equal data does not imply equal compute or parameter counts.','',
@@ -158,6 +193,8 @@ def markdown(r):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('runs',type=Path,nargs='+');p.add_argument('--output',type=Path,default=ROOT/'docs/research/fullscale_results');p.add_argument('--graph',type=Path,default=ROOT/'data/malecns-graph-v1')
-    args=p.parse_args();report=aggregate(args.runs);report['independent_audit']=audit_parameters(args.runs,args.graph);atomic_json(args.output.with_suffix('.json'),report);args.output.with_suffix('.md').write_text(markdown(report))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('runs',type=Path,nargs='+');p.add_argument('--output',type=Path,default=ROOT/'docs/research/fullscale_results');p.add_argument('--graph',type=Path,default=ROOT/'data/malecns-graph-v1');p.add_argument('--diagnostics',type=Path,nargs='+')
+    args=p.parse_args();report=aggregate(args.runs);report['independent_audit']=audit_parameters(args.runs,args.graph)
+    if args.diagnostics:report['posthoc_diagnostic']=combine_diagnostics(args.diagnostics,args.runs)
+    atomic_json(args.output.with_suffix('.json'),report);args.output.with_suffix('.md').write_text(markdown(report))
     print(json.dumps({'runs':report['runs'],'aggregate':report['aggregate'],'paired_differences':report['paired_differences']},indent=2))
