@@ -31,3 +31,9 @@ Record revisions here, including whether relevant results had been observed. Kee
   Prior reduced-circuit outcomes were already known. Configuration stores the
   exact prospective PDF hash. Continuous bounded recurrence and truncated
   two-tick TD gradients are engineered assumptions, not validated physiology.
+- 21 September 2026, after partial full-scale outcomes: a separate post-hoc
+  zero-recurrence diagnostic was defined in `configs/exp_2_fullscale_diagnostic.json`.
+  It will retain saved sensory mapping/readout parameters and remove recurrent
+  strengths, with no retraining or changes to the primary protocol. All ten saved
+  plastic conditions and all primary trial definitions are included. This is an
+  explanatory ablation, not a prospectively independent confirmation.

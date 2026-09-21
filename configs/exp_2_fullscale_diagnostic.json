@@ -1,0 +1,15 @@
+{
+  "defined_utc": "2026-09-21T07:02:20.431266+00:00",
+  "status": "Post-hoc diagnostic planned after partial primary outcomes",
+  "observed_before_definition": "Seeds 0 and 1 complete; seed 2 anatomical conditions complete; matching neural success rates observed.",
+  "selection": "All ten full_plastic final checkpoints, all 50 familiar and 50 unseen primary trial definitions per checkpoint",
+  "intervention": "Remove all recurrent strengths; retain learned action readout/bias and input mapping; same two-tick rate equations with zero sparse product omitted algebraically",
+  "training": "None; no primary model, hyperparameter, seed, budget or outcome is changed",
+  "compute": "NumPy float32 on GX10 host CPU; separate diagnostic, not a claim of full-graph computation",
+  "endpoints": [
+    "exact path agreement",
+    "outcome agreement",
+    "success by split"
+  ],
+  "interpretation": "Post-hoc sensitivity analysis; does recurrence materially affect the saved policy? Not an independently preregistered confirmatory test."
+}

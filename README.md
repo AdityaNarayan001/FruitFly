@@ -367,3 +367,18 @@ release with its `PYTHONPATH=src` and the shared `../../.venv/bin/python` enviro
 Records include raw experience, body-ID input mapping, null wiring, full learned
 weight arrays, complete trial paths, parameter checks, exact source archives and
 immutable hashes. Native checkpoint replay starts at a fresh trial boundary.
+
+Once every full-scale partition is complete, independently verify and summarize it:
+
+```sh
+.venv/bin/python scripts/summarize_fullscale.py \
+  runs/gx10-a/exp_2_fullscale/<completed-run-A> \
+  runs/gx10-b/exp_2_fullscale/<completed-run-B> \
+  --graph data/malecns-graph-v1
+```
+
+The verifier checks artifact hashes, full policy arrays and sign bounds, shared
+experience, exact trial coverage, and replays every saved maze path. It refuses
+engineering preflights, incomplete partitions and duplicate conditions. Its compact
+JSON/Markdown report is written to `docs/research/fullscale_results.*`; no raw
+learned weights or dataset files are committed to Git.
